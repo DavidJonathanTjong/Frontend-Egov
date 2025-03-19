@@ -1,12 +1,17 @@
+"use client";
+
 import Announcements from "@/components/tampilan_adm/Announcements";
 import AttendanceChart from "@/components/tampilan_adm/AttendanceChart";
 import CountChart from "@/components/tampilan_adm/CountChart";
 import EventCalendar from "@/components/tampilan_adm/EventCalendar";
 import FinanceChart from "@/components/tampilan_adm/FinanceChart";
 import UserCard from "@/components/tampilan_adm/UserCard";
-import DashboardLayout from "@/app/dashboard/layout";
+import useAuth from "@/hooks/useAuth";
 
 const AdminPage = () => {
+  const { user, loading } = useAuth();
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/* LEFT */}

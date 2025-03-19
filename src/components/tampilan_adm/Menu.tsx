@@ -1,6 +1,10 @@
+"use client";
+
 import { role } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const menuItems = [
   {
@@ -9,86 +13,26 @@ const menuItems = [
       {
         icon: "/images/home.png",
         label: "Home",
-        href: "/",
+        href: "/dashboard/admin",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
         icon: "/images/teacher.png",
-        label: "Teachers",
-        href: "/list/teachers",
+        label: "Users",
+        href: "/dashboard/list/teachers",
         visible: ["admin", "teacher"],
       },
       {
         icon: "/images/student.png",
-        label: "Students",
-        href: "/list/students",
+        label: "Wilayah",
+        href: "/dashboard/list/students",
         visible: ["admin", "teacher"],
       },
       {
         icon: "/images/parent.png",
-        label: "Parents",
-        href: "/list/parents",
+        label: "Produksi Tanaman",
+        href: "/dashboard/list/parents",
         visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/images/subject.png",
-        label: "Subjects",
-        href: "/list/subjects",
-        visible: ["admin"],
-      },
-      {
-        icon: "/images/class.png",
-        label: "Classes",
-        href: "/list/classes",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/images/lesson.png",
-        label: "Lessons",
-        href: "/list/lessons",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/images/exam.png",
-        label: "Exams",
-        href: "/list/exams",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/assignment.png",
-        label: "Assignments",
-        href: "/list/assignments",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/result.png",
-        label: "Results",
-        href: "/list/results",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/attendance.png",
-        label: "Attendance",
-        href: "/list/attendance",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/calendar.png",
-        label: "Events",
-        href: "/list/events",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/message.png",
-        label: "Messages",
-        href: "/list/messages",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/announcement.png",
-        label: "Announcements",
-        href: "/list/announcements",
-        visible: ["admin", "teacher", "student", "parent"],
       },
     ],
   },
@@ -98,19 +42,7 @@ const menuItems = [
       {
         icon: "/images/profile.png",
         label: "Profile",
-        href: "/profile",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/setting.png",
-        label: "Settings",
-        href: "/settings",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/images/logout.png",
-        label: "Logout",
-        href: "/logout",
+        href: "/dashboard/list/lessons",
         visible: ["admin", "teacher", "student", "parent"],
       },
     ],
@@ -118,6 +50,32 @@ const menuItems = [
 ];
 
 const Menu = () => {
+  const router = useRouter();
+
+  const onLogOutHandler = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) return;
+
+      const response = await fetch("http://localhost:8000/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        Cookies.remove("token");
+        router.push("/login");
+      } else {
+        console.error("Logout gagal:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan saat logout:", error);
+    }
+  };
+
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
@@ -141,6 +99,13 @@ const Menu = () => {
           })}
         </div>
       ))}
+      <button
+        onClick={onLogOutHandler}
+        className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-red-100 w-full mt-4"
+      >
+        <Image src="/images/logout.png" alt="Logout" width={20} height={20} />
+        <span className="hidden lg:block">Logout</span>
+      </button>
     </div>
   );
 };
