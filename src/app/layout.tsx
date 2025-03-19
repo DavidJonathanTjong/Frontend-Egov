@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { getServerSession } from "next-auth";
+import SessionProvider from "../components/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,17 +20,19 @@ export const metadata: Metadata = {
   description: "Distribusi Penduduk Kota Banjarbaru",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SessionProvider session={session}>{children}</SessionProvider>
         <Toaster />
       </body>
     </html>
