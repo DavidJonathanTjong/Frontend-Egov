@@ -1,48 +1,71 @@
-import React from "react";
+"use client";
+
+import React, { use, useEffect, useState } from "react";
 import { Navigation, Footer } from "@/components";
 import Dashboard from "./Dashboard";
+import axios from "axios";
 
-async function getData() {
-  const apiKey = "http://127.0.0.1:8000/api/statistik/client";
+function Page() {
+  const [dataVegetable, setDataVegetable] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch halaman pertama untuk mendapatkan jumlah total halaman
-  const response = await fetch(apiKey);
-  const dataJson = await response.json();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const apiKey = "http://127.0.0.1:8000/api/statistik/client";
+        let currentPage = 1;
+        let totalPages = 1;
+        let maxRowPerEachData = 2000;
+        let allData = [];
 
-  const totalPages = dataJson.pagination.last_page;
-  let allData = dataJson.data ?? [];
+        while (currentPage <= totalPages) {
+          console.log(`Fetching page ${currentPage}...`);
+          const { data } = await axios.get(
+            `${apiKey}?page=${currentPage}&pageLength=${maxRowPerEachData}`
+          );
 
-  // Fetch halaman lain secara bersamaan
-  const responses = await Promise.all(
-    Array.from({ length: totalPages - 1 }, (_, i) =>
-      fetch(`${apiKey}?page=${i + 2}`).then((res) => res.json())
-    )
-  );
+          if (currentPage === 1) {
+            totalPages = data.pagination?.last_page || 1;
+          }
 
-  // Gabungkan semua data
-  responses.forEach((response) => {
-    allData = allData.concat(response.data);
-  });
+          allData = allData.concat(data.data);
+          currentPage++;
+        }
 
-  console.log(allData);
+        // Format data
+        const formattedData = allData.map((item) => ({
+          id: item.id,
+          year: item.year,
+          province: item.province,
+          vegetable: item.vegetable,
+          production: item.production,
+        }));
 
-  return allData.map((item: any) => ({
-    id: item.id,
-    year: item.year,
-    province: item.province,
-    vegetable: item.vegetable,
-    production: item.production,
-  }));
-}
+        setDataVegetable(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-async function Page() {
-  const apiData = await getData();
+    fetchData();
+  }, []);
+
   return (
-    <>
+    <div className="flex flex-col h-screen">
       <Navigation />
-      <Dashboard apiData={apiData} />
+      <div className="flex-1 p-4">
+        {!loading ? (
+          <Dashboard apiData={dataVegetable} />
+        ) : (
+          <div className="">
+            <p className="text-center">Data Anda sedang Dimuat...</p>
+          </div>
+        )}
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }
 
