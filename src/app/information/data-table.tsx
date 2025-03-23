@@ -50,12 +50,10 @@ import {
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -64,6 +62,57 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [provinceFilter, setProvinceFilter] = React.useState("");
+  const [yearFilter, setYearFilter] = React.useState("");
+  const [vegetableFilter, setVegetableFilter] = React.useState("");
+  const [data, setData] = React.useState<TData[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const fetchTotalCount = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/statistik/client?page=1"
+      );
+      const dataJson = await response.json();
+      return dataJson.pagination?.total ?? 0; // Ambil total jumlah data
+    } catch (error) {
+      console.error("Error fetching total count:", error);
+      return 0;
+    }
+  };
+
+  const fetchFilteredData = async (
+    province: string,
+    year: string,
+    vegetable: string
+  ) => {
+    setIsLoading(true);
+    try {
+      const totalCount = await fetchTotalCount();
+      const url = new URL("http://127.0.0.1:8000/api/statistik/client");
+      url.searchParams.set("page", "1");
+      url.searchParams.set("pageLength", totalCount.toString());
+      if (province) url.searchParams.set("province", province);
+      if (year) url.searchParams.set("year", year);
+      if (vegetable) url.searchParams.set("vegetable", vegetable);
+
+      const response = await fetch(url.toString());
+      const dataJson = await response.json();
+      setData(dataJson.data ?? []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchFilteredData(provinceFilter, yearFilter, vegetableFilter);
+    }, 500); // Menunggu 500ms sebelum request API
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [provinceFilter, yearFilter, vegetableFilter]);
 
   const table = useReactTable({
     data,
@@ -88,14 +137,23 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Cari Kecamatan..."
-          value={
-            (table.getColumn("kecamatan")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("kecamatan")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
+          placeholder="Cari Provinsi"
+          value={provinceFilter}
+          onChange={(event) => setProvinceFilter(event.target.value)}
+          className="max-w-52"
+        />
+        <Input
+          placeholder="Sayuran"
+          value={vegetableFilter}
+          onChange={(event) => setVegetableFilter(event.target.value)}
+          className="w-52 ml-2"
+        />
+        <Input
+          placeholder="Tahun"
+          type="number"
+          value={yearFilter}
+          onChange={(event) => setYearFilter(event.target.value)}
+          className="w-32 ml-2"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -145,7 +203,16 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Sedang Memuat Data...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -167,7 +234,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Tidak ada data yang ditemukan.
                 </TableCell>
               </TableRow>
             )}

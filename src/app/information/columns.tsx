@@ -10,12 +10,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 // You can use a Zod schema here if you want.
 
 export type DataPopulasiBanjarbaru = {
-  kecamatan: string;
-  jumlahPenduduk: number;
-  lajuPertumbuhanPenduduk: number;
-  persentasePenduduk: number;
-  kepadatanPenduduk: number;
-  rasioJenisKelamin: number;
+  id: string;
+  year: string;
+  province: string;
+  vegetable: string;
+  production: number;
 };
 
 export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
@@ -42,78 +41,48 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "kecamatan",
+    accessorKey: "province",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Kecamatan
+          Provinsi
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const kecamatan = row.getValue<String>("kecamatan");
-      return <div className="text-left ml-4 font-medium">{kecamatan}</div>;
+      const province = row.getValue<String>("province");
+      return <div className="text-left ml-4 font-medium">{province}</div>;
     },
   },
 
   {
-    accessorKey: "jumlahPenduduk",
-    header: "Jumlah Penduduk",
+    accessorKey: "year",
+    header: "Tahun",
     cell: ({ row }) => {
-      const jumlahPenduduk = row.getValue<number>("jumlahPenduduk");
-      return (
-        <div className="text-left">
-          {jumlahPenduduk.toLocaleString("id-ID")}
-        </div>
-      );
+      const year = row.getValue<String>("year");
+      return <div className="text-left">{year}</div>;
     },
   },
 
   {
-    accessorKey: "lajuPertumbuhanPenduduk",
-    header: "Laju Pertumbuhan Penduduk per Tahun",
+    accessorKey: "vegetable",
+    header: "Jenis Sayuran",
     cell: ({ row }) => {
-      const lajuPertumbuhanPenduduk = row.getValue<number>(
-        "lajuPertumbuhanPenduduk"
-      );
-      return <div className="text-left">{lajuPertumbuhanPenduduk}</div>;
+      const vegetable = row.getValue<String>("vegetable");
+      return <div className="text-left">{vegetable}</div>;
     },
   },
 
   {
-    accessorKey: "persentasePenduduk",
-    header: "Persentase Penduduk (%)",
+    accessorKey: "production",
+    header: "Jumlah Produksi",
     cell: ({ row }) => {
-      const persentasePenduduk = row.getValue<number>("persentasePenduduk");
-      return <div className="text-left">{persentasePenduduk}</div>;
-    },
-  },
-  {
-    accessorKey: "kepadatanPenduduk",
-    header: "Kepadatan Penduduk per km persegi (km²)",
-    cell: ({ row }) => {
-      const kepadatanPenduduk = row.getValue<number>("kepadatanPenduduk");
-      return (
-        <div className="text-left">
-          {kepadatanPenduduk.toLocaleString("id-ID")}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "rasioJenisKelamin",
-    header: "Rasio Jenis Kelamin",
-    cell: ({ row }) => {
-      const rasioJenisKelamin = row.getValue<number>("rasioJenisKelamin");
-      return (
-        <div className="text-left">
-          {rasioJenisKelamin.toLocaleString("id-ID")}
-        </div>
-      );
+      const production = row.getValue<number>("production");
+      return <div className="text-left">{production}</div>;
     },
   },
 ];
