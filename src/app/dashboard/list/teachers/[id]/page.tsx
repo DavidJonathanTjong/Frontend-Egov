@@ -24,6 +24,7 @@ const SingleTeacherPage = () => {
   const [imageFileName, setImageFileName] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState("/images/avatar.png");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  // kode pegawai nanti di fetch
   const kodePegawai = "198809102020030311000";
   const token = Cookies.get("token");
 
