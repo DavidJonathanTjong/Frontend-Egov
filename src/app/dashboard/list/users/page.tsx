@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import showFormattedDate from "@/utils/formatedData";
 import { useForm } from "react-hook-form";
 
-const TeacherListPage = () => {
+const UserListPage = () => {
   const [data, setData] = useState<DataPegawaiKedinasan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -276,4 +276,4 @@ const TeacherListPage = () => {
   );
 };
 
-export default TeacherListPage;
+export default UserListPage;

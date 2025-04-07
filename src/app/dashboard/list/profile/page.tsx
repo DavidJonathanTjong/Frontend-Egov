@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const SingleTeacherPage = () => {
   const [firstName, setFirstName] = useInput();
@@ -24,9 +25,20 @@ const SingleTeacherPage = () => {
   const [imageFileName, setImageFileName] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState("/images/avatar.png");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  // kode pegawai nanti di fetch
-  const kodePegawai = "198809102020030311000";
+
   const token = Cookies.get("token");
+  const [kodePegawai, setKodePegawai] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!token) return;
+    try {
+      const decodedToken: any = jwtDecode(token);
+      const pegawai = decodedToken.sub;
+      setKodePegawai(pegawai);
+    } catch (err) {
+      console.error("Token invalid:", err);
+    }
+  }, [token]);
 
   useEffect(() => {
     if (!token || !kodePegawai) return;
@@ -149,35 +161,20 @@ const SingleTeacherPage = () => {
                 disabled
                 type="text"
                 placeholder="Kode Pegawai"
-                value={"11029131"}
+                value={kodePegawai || ""}
               />
             </div>
             <div>
               <Label htmlFor="text">Active Since</Label>
-              <Input
-                disabled
-                type="text"
-                placeholder="Kode Pegawai"
-                value={"2020"}
-              />
+              <Input disabled type="text" placeholder="2000" value={2000} />
             </div>
             <div>
               <Label htmlFor="text">Email</Label>
-              <Input
-                disabled
-                type="text"
-                placeholder="Kode Pegawai"
-                value={"3242"}
-              />
+              <Input disabled type="text" placeholder="Email" value={"3242"} />
             </div>
             <div>
               <Label htmlFor="text">Name</Label>
-              <Input
-                disabled
-                type="text"
-                placeholder="Kode Pegawai"
-                value={"3242"}
-              />
+              <Input disabled type="text" placeholder="Name" value={"3242"} />
             </div>
           </div>
           <div className="flex justify-end mt-6 gap-2">

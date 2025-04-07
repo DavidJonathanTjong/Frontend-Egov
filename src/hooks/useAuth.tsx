@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import apiService from "@/apiService";
+
+interface User {
+  iss: string;
+  iat: number;
+  exp: number;
+  nbf: number;
+  jti: string;
+  sub: string;
+  prv: string;
+}
 
 const useAuth = () => {
   const router = useRouter();
@@ -20,18 +30,13 @@ const useAuth = () => {
     const verifyToken = async () => {
       try {
         // Decode the token to check its validity
-        const decodedToken: any = jwtDecode(token);
+        const decodedToken = jwtDecode<JwtPayload>(token);
         const currentTime = Date.now() / 1000;
 
-        if (decodedToken.exp < currentTime) {
+        if (!decodedToken.exp || decodedToken.exp < currentTime) {
           throw new Error("Token expired");
         }
-
-        // Checking user data from the backend
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/user`
-        );
+        const response = await apiService.get<User>("/user");
         setUser(response.data);
       } catch (error) {
         console.error("Invalid token:", error);

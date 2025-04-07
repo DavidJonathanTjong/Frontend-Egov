@@ -209,7 +209,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Sedang Memuat Data...
+                  Sedang Menyiapkan Data...
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
