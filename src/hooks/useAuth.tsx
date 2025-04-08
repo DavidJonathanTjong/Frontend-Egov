@@ -18,12 +18,14 @@ const useAuth = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(true);
 
   useEffect(() => {
     const token = Cookies.get("token");
 
     if (!token) {
-      router.push("/login");
+      setLoading(false);
+      setShouldRedirect(true);
       return;
     }
 
@@ -37,11 +39,16 @@ const useAuth = () => {
           throw new Error("Token expired");
         }
         const response = await apiService.get<User>("/user");
-        setUser(response.data);
+        if (response.status === 401) {
+          throw new Error("Token expired");
+        } else {
+          setShouldRedirect(false);
+          setUser(response.data);
+        }
       } catch (error) {
         console.error("Invalid token:", error);
         Cookies.remove("token");
-        router.push("/login");
+        setShouldRedirect(true);
       } finally {
         setLoading(false);
       }
@@ -50,7 +57,13 @@ const useAuth = () => {
     verifyToken();
   }, [router]);
 
-  return { user, loading };
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push("/login");
+    }
+  }, [shouldRedirect, router]);
+
+  return { user, loading, shouldRedirect };
 };
 
 export default useAuth;
