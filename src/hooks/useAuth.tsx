@@ -18,7 +18,7 @@ const useAuth = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [shouldRedirect, setShouldRedirect] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get("token");

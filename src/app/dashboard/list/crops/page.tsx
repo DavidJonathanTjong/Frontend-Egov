@@ -1,6 +1,6 @@
 import { DataTable } from "./data-table";
 import { DataPopulasiBanjarbaru, columns } from "./columns";
-import Cookies from "js-cookie";
+import Link from "next/link";
 import Image from "next/image";
 
 const CropsListPage = () => {
@@ -11,17 +11,19 @@ const CropsListPage = () => {
         <h1 className="hidden md:block text-lg font-semibold">Daftar Crops</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <span>
-            <b>Add or Update Crops</b>
+            <b>Add Crops or Insert File</b>
           </span>
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image
-                src="/images/plus-icon.png"
-                alt=""
-                width={30}
-                height={30}
-              />
-            </button>
+            <Link href="/dashboard/list/crops/add">
+              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                <Image
+                  src="/images/plus-icon.png"
+                  alt="Tambah"
+                  width={30}
+                  height={30}
+                />
+              </button>
+            </Link>
           </div>
         </div>
       </div>
