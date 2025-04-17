@@ -4,6 +4,36 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import api from "./apiService";
 
+// The example of using apiService in a component
+// import React, { useEffect, useState } from "react";
+// import api from "../hooks/useAuth"; // Adjust the path if necessary
+
+// const ExampleComponent = () => {
+//   const [data, setData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await api.get("/api/example-endpoint");
+//         setData(response.data);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   if (loading) return <p>Loading...</p>;
+
+//   return <div>{JSON.stringify(data)}</div>;
+// };
+
+// export default ExampleComponent;
+
 const useAuth = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -26,11 +56,6 @@ const useAuth = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
         Cookies.remove("token");
-        Cookies.remove("refresh_token");
-        toast.error("Your session has expired. Please log in again.", {
-          duration: 5000,
-          position: "top-center",
-        });
         router.push("/login");
       } finally {
         setLoading(false);
