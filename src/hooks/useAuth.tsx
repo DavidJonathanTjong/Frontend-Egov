@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
+import api from "./apiService";
 
 const useAuth = () => {
   const router = useRouter();
@@ -17,32 +17,25 @@ const useAuth = () => {
       return;
     }
 
-    const verifyToken = async () => {
+    const fetchUser = async () => {
       try {
-        // Decode the token to check its validity
-        const decodedToken: any = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-
-        if (decodedToken.exp < currentTime) {
-          throw new Error("Token expired");
-        }
-
-        // Checking user data from the backend
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/user`
-        );
+        const response = await api.get("/user");
         setUser(response.data);
       } catch (error) {
-        console.error("Invalid token:", error);
+        console.error("Error fetching user data:", error);
         Cookies.remove("token");
+        Cookies.remove("refresh_token");
+        toast.error("Your session has expired. Please log in again.", {
+          duration: 5000,
+          position: "top-center",
+        });
         router.push("/login");
       } finally {
         setLoading(false);
       }
     };
 
-    verifyToken();
+    fetchUser();
   }, [router]);
 
   return { user, loading };
