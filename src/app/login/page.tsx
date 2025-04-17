@@ -15,6 +15,10 @@ function Page() {
   const [email, onEmailChange] = useInput("");
   const [password, onPasswordChange] = useInput("");
   const [error, setError] = useState("");
+  // Cookies.set(
+  //   "token",
+  //   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NDQ4MDM2OTgsImV4cCI6MTc0NDgwNzI5OCwibmJmIjoxNzQ0ODAzNjk4LCJqdGkiOiJoVHRzVTF5S0I2dDZYblZKIiwic3ViIjoiMzU0MjQxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.wd9KtqPV77b-ex_YS5ywWyio_lqSnsdtGjx87T_2NFM"
+  // );
 
   const handleCredentialLogin = async (event: React.FormEvent) => {
     event.preventDefault();

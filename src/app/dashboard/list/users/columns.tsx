@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Cookies from "js-cookie";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +28,9 @@ export type DataPegawaiKedinasan = {
   updatedAt: string;
 };
 
-export const columns: ColumnDef<DataPegawaiKedinasan>[] = [
+export const columns = (
+  fetchData: () => void
+): ColumnDef<DataPegawaiKedinasan>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -108,6 +111,33 @@ export const columns: ColumnDef<DataPegawaiKedinasan>[] = [
     header: "Action",
     cell: ({ row }) => {
       const user = row.original;
+      const handleDelete = async () => {
+        if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
+          try {
+            const token = Cookies.get("token");
+            const response = await fetch(
+              `http://127.0.0.1:8000/api/users/delete/${user.kodePegawai}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Gagal menghapus pegawai");
+            }
+
+            alert("Pegawai berhasil dihapus!");
+            fetchData(); // Memperbarui data setelah penghapusan
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan saat menghapus pegawai.");
+          }
+        }
+      };
 
       return (
         <DropdownMenu>
@@ -124,8 +154,9 @@ export const columns: ColumnDef<DataPegawaiKedinasan>[] = [
               Salin Kode Pegawai
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit Identias Pegawai</DropdownMenuItem>
-            <DropdownMenuItem>Hapus Pegawai</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>
+              Hapus Pegawai
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

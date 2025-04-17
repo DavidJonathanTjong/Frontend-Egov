@@ -8,12 +8,14 @@ const useAuth = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get("token");
 
     if (!token) {
-      router.push("/login");
+      setLoading(false);
+      setShouldRedirect(true);
       return;
     }
 
@@ -38,7 +40,13 @@ const useAuth = () => {
     fetchUser();
   }, [router]);
 
-  return { user, loading };
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push("/login");
+    }
+  }, [shouldRedirect, router]);
+
+  return { user, loading, shouldRedirect };
 };
 
 export default useAuth;

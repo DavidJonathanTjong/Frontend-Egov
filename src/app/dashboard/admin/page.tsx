@@ -7,10 +7,21 @@ import EventCalendar from "@/components/tampilan_adm/EventCalendar";
 import FinanceChart from "@/components/tampilan_adm/FinanceChart";
 import UserCard from "@/components/tampilan_adm/UserCard";
 import useAuth from "@/hooks/useAuth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const AdminPage = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, shouldRedirect } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push("/login");
+    }
+  }, [shouldRedirect, router]);
+
   if (loading) return <div>Loading...</div>;
+  if (!user) return null;
 
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">

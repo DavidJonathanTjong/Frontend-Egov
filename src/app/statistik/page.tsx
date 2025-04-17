@@ -1,12 +1,13 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigation, Footer } from "@/components";
 import Dashboard from "./Dashboard";
 import axios from "axios";
+import { ApiData } from "./types";
 
 function Page() {
-  const [dataVegetable, setDataVegetable] = useState([]);
+  const [dataVegetable, setDataVegetable] = useState<ApiData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ function Page() {
         let currentPage = 1;
         let totalPages = 1;
         let maxRowPerEachData = 2000;
-        let allData = [];
+        let allData: ApiData[] = [];
 
         while (currentPage <= totalPages) {
           console.log(`Fetching page ${currentPage}...`);

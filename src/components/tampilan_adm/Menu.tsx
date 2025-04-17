@@ -17,21 +17,21 @@ const menuItems = [
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
-        icon: "/images/teacher.png",
+        icon: "/images/student.png",
         label: "Users",
-        href: "/dashboard/list/teachers",
+        href: "/dashboard/list/users",
         visible: ["admin", "teacher"],
       },
       {
         icon: "/images/student.png",
-        label: "Wilayah",
-        href: "/dashboard/list/students",
+        label: "Petani",
+        href: "/dashboard/list/petani",
         visible: ["admin", "teacher"],
       },
       {
         icon: "/images/parent.png",
         label: "Produksi Tanaman",
-        href: "/dashboard/list/parents",
+        href: "/dashboard/list/crops",
         visible: ["admin", "teacher"],
       },
     ],
@@ -42,7 +42,7 @@ const menuItems = [
       {
         icon: "/images/profile.png",
         label: "Profile",
-        href: "/dashboard/list/lessons",
+        href: "/dashboard/list/profile",
         visible: ["admin", "teacher", "student", "parent"],
       },
     ],
@@ -89,7 +89,7 @@ const Menu = () => {
                 <Link
                   href={item.href}
                   key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md  hover:bg-blue-100"
                 >
                   <Image src={item.icon} alt="" width={20} height={20} />
                   <span className="hidden lg:block">{item.label}</span>
