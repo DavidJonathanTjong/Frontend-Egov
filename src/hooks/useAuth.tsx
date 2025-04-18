@@ -1,18 +1,38 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { jwtDecode, JwtPayload } from "jwt-decode";
-import apiService from "@/apiService";
+import toast from "react-hot-toast";
+import api from "./apiService";
 
-interface User {
-  iss: string;
-  iat: number;
-  exp: number;
-  nbf: number;
-  jti: string;
-  sub: string;
-  prv: string;
-}
+// The example of using apiService in a component
+// import React, { useEffect, useState } from "react";
+// import api from "../hooks/useAuth"; // Adjust the path if necessary
+
+// const ExampleComponent = () => {
+//   const [data, setData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await api.get("/api/example-endpoint");
+//         setData(response.data);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   if (loading) return <p>Loading...</p>;
+
+//   return <div>{JSON.stringify(data)}</div>;
+// };
+
+// export default ExampleComponent;
 
 const useAuth = () => {
   const router = useRouter();
@@ -29,32 +49,20 @@ const useAuth = () => {
       return;
     }
 
-    const verifyToken = async () => {
+    const fetchUser = async () => {
       try {
-        // Decode the token to check its validity
-        const decodedToken = jwtDecode<JwtPayload>(token);
-        const currentTime = Date.now() / 1000;
-
-        if (!decodedToken.exp || decodedToken.exp < currentTime) {
-          throw new Error("Token expired");
-        }
-        const response = await apiService.get<User>("/user");
-        if (response.status === 401) {
-          throw new Error("Token expired");
-        } else {
-          setShouldRedirect(false);
-          setUser(response.data);
-        }
+        const response = await api.get("/user");
+        setUser(response.data);
       } catch (error) {
-        console.error("Invalid token:", error);
+        console.error("Error fetching user data:", error);
         Cookies.remove("token");
-        setShouldRedirect(true);
+        router.push("/login");
       } finally {
         setLoading(false);
       }
     };
 
-    verifyToken();
+    fetchUser();
   }, [router]);
 
   useEffect(() => {
