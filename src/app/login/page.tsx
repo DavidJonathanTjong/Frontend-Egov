@@ -27,7 +27,7 @@ function Page() {
     // berhasil tapi tidak terhubung credential
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/auth/login`,
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/auth/login`,
         { email, password }
       );
       Cookies.set("token", response.data.token);
