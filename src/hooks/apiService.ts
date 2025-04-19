@@ -2,14 +2,18 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
-import { createUserStore } from "../app/data/UserStore"; // Import the UserStore
+// import { createUserStore } from "../app/data/UserStore"; // Import the UserStore
 
-const { setUser } = createUserStore(); // Create the user store instance
+// const { setUser } = createUserStore(); // Create the user store instance
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BACKEND,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+    "Access-Control-Allow-Headers":
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
   },
 });
 
@@ -26,7 +30,7 @@ api.interceptors.request.use(async (config) => {
   const token = Cookies.get("token");
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
-    await fetchUserData(token);
+    // await fetchUserData(token);
   }
   return config;
 });
