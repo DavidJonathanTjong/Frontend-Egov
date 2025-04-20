@@ -9,10 +9,20 @@ import UserCard from "@/components/tampilan_adm/UserCard";
 import useAuth from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const AdminPage = () => {
   const { user, loading, shouldRedirect } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (loading) {
+      toast.loading("Loading...");
+    } else {
+      toast.dismiss();
+      toast.success("Welcome back!");
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (shouldRedirect) {
@@ -20,7 +30,6 @@ const AdminPage = () => {
     }
   }, [shouldRedirect, router]);
 
-  if (loading) return <div>Loading...</div>;
   if (!user) return null;
 
   return (

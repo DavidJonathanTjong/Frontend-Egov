@@ -5,6 +5,7 @@ import { Navigation, Footer } from "@/components";
 import Dashboard from "./Dashboard";
 import axios from "axios";
 import { ApiData } from "./types";
+import api from "@/hooks/apiService";
 
 function Page() {
   const [dataVegetable, setDataVegetable] = useState<ApiData[]>([]);
@@ -13,7 +14,7 @@ function Page() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiKey = "http://127.0.0.1:8000/api/statistik/client";
+        const apiKey = "/statistik/client";
         let currentPage = 1;
         let totalPages = 1;
         let maxRowPerEachData = 2000;
@@ -21,7 +22,7 @@ function Page() {
 
         while (currentPage <= totalPages) {
           console.log(`Fetching page ${currentPage}...`);
-          const { data } = await axios.get(
+          const { data } = await api.get(
             `${apiKey}?page=${currentPage}&pageLength=${maxRowPerEachData}`
           );
 

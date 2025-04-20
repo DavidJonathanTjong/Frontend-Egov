@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import api from "@/apiService";
 
 const CropsAddPage = () => {
   const [form, setForm] = useState({
@@ -29,20 +30,22 @@ const CropsAddPage = () => {
     setMessage("");
 
     try {
-      const token = Cookies.get("token");
+      // const token = Cookies.get("token");
 
-      const res = await fetch("http://127.0.0.1:8000/api/crops", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
+      // const res = await fetch("http://127.0.0.1:8000/api/crops", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: JSON.stringify(form),
+      // });
 
-      const data = await res.json();
+      const res = await api.post("/crops", JSON.stringify(form));
 
-      if (!res.ok) throw new Error(data.message || "Something went wrong");
+      const data = res.data;
+
+      if (!res.status) throw new Error(data.message || "Something went wrong");
 
       setMessage("Data berhasil ditambahkan.");
       setForm({ year: "", province: "", vegetable: "", production: "" });
@@ -72,19 +75,16 @@ const CropsAddPage = () => {
     formData.append("file", file);
 
     try {
-      const token = Cookies.get("token");
-
-      const res = await fetch("http://localhost:8000/api/crops/import", {
-        method: "POST",
+      const res = await api.post("/crops/import", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        body: formData,
       });
 
-      const data = await res.json();
+      const result = res.data;
 
-      if (!res.ok) throw new Error(data.message || "Import failed");
+      if (res.status < 200 || res.status >= 300)
+        throw new Error(result.message || "Import failed");
 
       setMessage("Import berhasil.");
       setFile(null);

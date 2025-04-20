@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
+import api from "@/hooks/apiService";
 
 import {
   ChevronLeft,
@@ -70,11 +71,10 @@ export function DataTable<TData, TValue>({
 
   const fetchTotalCount = async () => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/statistik/client?page=1"
-      );
-      const dataJson = await response.json();
-      return dataJson.pagination?.total ?? 0; // Ambil total jumlah data
+      const response = await api.get("/statistik/client", {
+        params: { page: 1 },
+      });
+      return response.data.pagination?.total ?? 0;
     } catch (error) {
       console.error("Error fetching total count:", error);
       return 0;
@@ -89,16 +89,15 @@ export function DataTable<TData, TValue>({
     setIsLoading(true);
     try {
       const totalCount = await fetchTotalCount();
-      const url = new URL("http://127.0.0.1:8000/api/statistik/client");
-      url.searchParams.set("page", "1");
-      url.searchParams.set("pageLength", totalCount.toString());
-      if (province) url.searchParams.set("province", province);
-      if (year) url.searchParams.set("year", year);
-      if (vegetable) url.searchParams.set("vegetable", vegetable);
-
-      const response = await fetch(url.toString());
-      const dataJson = await response.json();
-      setData(dataJson.data ?? []);
+      const params: any = {
+        page: 1,
+        pageLength: totalCount,
+      };
+      if (province) params.province = province;
+      if (year) params.year = year;
+      if (vegetable) params.vegetable = vegetable;
+      const response = await api.get("/statistik/client", { params });
+      setData(response.data.data ?? []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {

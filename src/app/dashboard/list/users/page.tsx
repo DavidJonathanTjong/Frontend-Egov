@@ -7,6 +7,7 @@ import { DataPegawaiKedinasan, columns } from "./columns";
 import Cookies from "js-cookie";
 import showFormattedDate from "@/utils/formatedData";
 import { useForm } from "react-hook-form";
+import api from "@/hooks/apiService";
 
 const UserListPage = () => {
   const [data, setData] = useState<DataPegawaiKedinasan[]>([]);
@@ -24,9 +25,7 @@ const UserListPage = () => {
   } = useForm();
 
   const fetchData = async () => {
-    const apiKey = `${process.env.NEXT_PUBLIC_API_BACKEND}/api/users/list`;
     const token = Cookies.get("token");
-
     if (!token) {
       console.error("Token tidak ditemukan!");
       setLoading(false);
@@ -34,21 +33,9 @@ const UserListPage = () => {
     }
 
     try {
-      const response = await fetch(apiKey, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-
-      const dataJson = await response.json();
+      const response = await api.get("/users/list");
+      const dataJson = response.data;
       console.log("Response:", dataJson);
-
       setData(
         dataJson.data?.map((item: any) => ({
           kodePegawai: item.kode_pegawai,
@@ -96,30 +83,26 @@ const UserListPage = () => {
       if (formData.img_profile) {
         formDataToSend.append("img_profile", formData.img_profile);
       }
-
-      const token = Cookies.get("token");
-
-      const response = await fetch("http://127.0.0.1:8000/api/user/register", {
-        method: "POST",
+      const response = await api.post("/user/register", formDataToSend, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        body: formDataToSend,
       });
-
-      const result = await response.json();
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         alert("User berhasil ditambahkan!");
         reset();
         setIsModalOpen(false);
         setImagePreview(null);
-        fetchData(); // Memperbarui data setelah menambahkan user
+        fetchData();
       } else {
-        alert(`Gagal: ${result.message}`);
+        alert(`Gagal: ${response.data.message}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Terjadi kesalahan:", error);
-      alert("Terjadi kesalahan saat mengirim data.");
+      const message =
+        error?.response?.data?.message ||
+        "Terjadi kesalahan saat mengirim data.";
+      alert(message);
     }
   };
 
