@@ -16,6 +16,7 @@ import {
 import { ArrowUpDown } from "lucide-react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import api from "@/hooks/apiService";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -114,22 +115,7 @@ export const columns = (
       const handleDelete = async () => {
         if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
           try {
-            const token = Cookies.get("token");
-            const response = await fetch(
-              `http://127.0.0.1:8000/api/users/delete/${user.kodePegawai}`,
-              {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            if (!response.ok) {
-              throw new Error("Gagal menghapus pegawai");
-            }
-
+            await api.delete(`/users/delete/${user.kodePegawai}`);
             alert("Pegawai berhasil dihapus!");
             fetchData(); // Memperbarui data setelah penghapusan
           } catch (error) {

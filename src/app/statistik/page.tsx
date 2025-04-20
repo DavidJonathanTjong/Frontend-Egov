@@ -3,38 +3,37 @@
 import React, { useEffect, useState } from "react";
 import { Navigation, Footer } from "@/components";
 import Dashboard from "./Dashboard";
-import axios from "axios";
-import { ApiData } from "./types";
 import api from "@/hooks/apiService";
+import { ApiData } from "./types";
 
 function Page() {
   const [dataVegetable, setDataVegetable] = useState<ApiData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
         const apiKey = "/statistik/client";
+        const maxRowPerPage = 2000;
         let currentPage = 1;
         let totalPages = 1;
-        let maxRowPerEachData = 2000;
         let allData: ApiData[] = [];
 
         while (currentPage <= totalPages) {
-          console.log(`Fetching page ${currentPage}...`);
-          const { data } = await api.get(
-            `${apiKey}?page=${currentPage}&pageLength=${maxRowPerEachData}`
+          const response = await api.get(
+            `${apiKey}?page=${currentPage}&pageLength=${maxRowPerPage}`
           );
+          const resData = response.data;
 
           if (currentPage === 1) {
-            totalPages = data.pagination?.last_page || 1;
+            totalPages = resData.pagination?.last_page || 1;
           }
 
-          allData = allData.concat(data.data);
+          const pageData = Array.isArray(resData.data) ? resData.data : [];
+          allData = allData.concat(pageData);
           currentPage++;
         }
 
-        // Format data
         const formattedData = allData.map((item) => ({
           id: item.id,
           year: item.year,
@@ -49,7 +48,7 @@ function Page() {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchData();
   }, []);
@@ -61,8 +60,8 @@ function Page() {
         {!loading ? (
           <Dashboard apiData={dataVegetable} />
         ) : (
-          <div className="">
-            <p className="text-center">Data Anda sedang Dimuat...</p>
+          <div className="text-center py-10">
+            <p>Data Anda sedang Dimuat...</p>
           </div>
         )}
       </div>

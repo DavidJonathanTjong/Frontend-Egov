@@ -30,6 +30,9 @@ const AdminPage = () => {
     }
   }, [shouldRedirect, router]);
 
+  // if (!loading) {
+  //   toast.dismiss();
+  // }
   if (!user) return null;
 
   return (
