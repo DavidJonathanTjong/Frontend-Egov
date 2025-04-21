@@ -23,12 +23,6 @@ const menuItems = [
         visible: ["admin", "teacher"],
       },
       {
-        icon: "/images/student.png",
-        label: "Petani",
-        href: "/dashboard/list/petani",
-        visible: ["admin", "teacher"],
-      },
-      {
         icon: "/images/parent.png",
         label: "Produksi Tanaman",
         href: "/dashboard/list/crops",
