@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import showFormattedDate from "@/utils/formatedData";
+import api from "@/hooks/apiService";
 
 const SingleTeacherPage = () => {
   const [name, setName] = useInput("");
@@ -42,30 +43,22 @@ const SingleTeacherPage = () => {
 
   useEffect(() => {
     if (!token || !kodePegawai) return;
+
     const fetchProfileData = async () => {
       try {
-        // Ambil nama file gambar
-        const imageNameResponse = await axios.get<{ image_name: string }>(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/profile/image/${kodePegawai}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+        const imageNameResponse = await api.get<{ image_name: string }>(
+          `/profile/image/${kodePegawai}`
         );
         const imageName = imageNameResponse.data.image_name;
         setImageFileName(imageName);
-
-        // Ambil gambar berdasarkan nama file
         if (imageName) {
-          const imageResponse = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/user/profile/${imageName}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-              responseType: "blob",
-            }
-          );
-          setProfileImage(URL.createObjectURL(imageResponse.data));
-          console.log(
-            "Profile Image URL:",
-            URL.createObjectURL(imageResponse.data)
-          );
+          const imageResponse = await api.get(`/user/profile/${imageName}`, {
+            responseType: "blob",
+          });
+          const imageBlob = imageResponse.data;
+          const imageUrl = URL.createObjectURL(imageBlob);
+          setProfileImage(imageUrl);
+          console.log("Profile Image URL:", imageUrl);
         }
       } catch (error) {
         console.error("Error fetching profile image:", error);
@@ -93,18 +86,17 @@ const SingleTeacherPage = () => {
     formData.append("img_profile", selectedImage);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/profile/edit-image/198809102020030311000`,
+      const response = await api.post(
+        `/profile/edit-image/${kodePegawai}`,
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
       alert("Image uploaded successfully!");
-      setProfileImage(response.data.profile_image); // Update image setelah upload sukses
+      setProfileImage(response.data.profile_image);
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to upload image.");
@@ -116,12 +108,8 @@ const SingleTeacherPage = () => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/users/list`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await api.get("/users/list");
+
         console.log(response);
 
         const userData = response.data.data.find(
@@ -129,7 +117,6 @@ const SingleTeacherPage = () => {
         );
 
         if (userData) {
-          // console.log untuk debug
           console.log("User found:", userData);
           setName(userData.name);
           setEmail(userData.email);
@@ -143,7 +130,7 @@ const SingleTeacherPage = () => {
     };
 
     fetchProfile();
-  }, [kodePegawai]);
+  }, [token, kodePegawai]);
 
   return (
     <div className="flex-1 p-8 flex flex-col gap-4 xl:flex-row">
@@ -242,11 +229,10 @@ const SingleTeacherPage = () => {
                 <Button
                   onClick={async () => {
                     try {
-                      await axios.put(
-                        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/profile/edit-profile/${kodePegawai}`,
-                        { name: name, email },
-                        { headers: { Authorization: `Bearer ${token}` } }
-                      );
+                      await api.put(`/profile/edit-profile/${kodePegawai}`, {
+                        name,
+                        email,
+                      });
                       alert("Profile updated successfully!");
                       setIsEditing(false);
                     } catch (error) {
@@ -273,7 +259,7 @@ const SingleTeacherPage = () => {
         <div className="bg-white rounded-md p-4 md:p-6 mt-6">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
             <label className="font-semibold text-lg">
-              ACCOUNT PASSWORD AND DELETE
+              CHANGE ACCOUNT PASSWORD
             </label>
             {!isChangingPassword && (
               <Button
@@ -311,14 +297,10 @@ const SingleTeacherPage = () => {
                         return;
                       }
                       try {
-                        await axios.put(
-                          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/profile/edit-password/${kodePegawai}`,
-                          {
-                            password: newPassword,
-                            password_confirmation: confirmPassword,
-                          },
-                          { headers: { Authorization: `Bearer ${token}` } }
-                        );
+                        await api.put(`/profile/edit-password/${kodePegawai}`, {
+                          password: newPassword,
+                          password_confirmation: confirmPassword,
+                        });
                         alert("Password updated successfully!");
                         setIsChangingPassword(false);
                       } catch (error) {
@@ -341,7 +323,7 @@ const SingleTeacherPage = () => {
             </div>
           )}
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <Checkbox id="deleteConfirm" />
               <Label htmlFor="deleteConfirm">
@@ -369,7 +351,7 @@ const SingleTeacherPage = () => {
             >
               Delete
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

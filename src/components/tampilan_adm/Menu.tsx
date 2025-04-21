@@ -37,6 +37,17 @@ const menuItems = [
     ],
   },
   {
+    title: "Machine Learning",
+    items: [
+      {
+        icon: "/images/profile.png",
+        label: "Prediction",
+        href: "/dashboard/list/prediksi",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
+    ],
+  },
+  {
     title: "OTHER",
     items: [
       {

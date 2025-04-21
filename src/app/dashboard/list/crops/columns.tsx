@@ -26,6 +26,10 @@ export type DataPopulasiBanjarbaru = {
   province: string;
   vegetable: string;
   production: number;
+  planted_area: number;
+  harvested_area: number;
+  fertilizer_type: number;
+  fertilizer_amount: number;
 };
 
 export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
@@ -94,6 +98,38 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     cell: ({ row }) => {
       const production = row.getValue<number>("production");
       return <div className="text-left">{production}</div>;
+    },
+  },
+  {
+    accessorKey: "planted_area",
+    header: "Planted Area",
+    cell: ({ row }) => {
+      const planted_area = row.getValue<number>("planted_area");
+      return <div className="text-left">{planted_area}</div>;
+    },
+  },
+  {
+    accessorKey: "harvested_area",
+    header: "Harvested Area",
+    cell: ({ row }) => {
+      const harvested_area = row.getValue<number>("harvested_area");
+      return <div className="text-left">{harvested_area}</div>;
+    },
+  },
+  {
+    accessorKey: "fertilizer_type",
+    header: "Fertilizer Type",
+    cell: ({ row }) => {
+      const fertilizer_type = row.getValue<number>("fertilizer_type");
+      return <div className="text-left">{fertilizer_type}</div>;
+    },
+  },
+  {
+    accessorKey: "fertilizer_amount",
+    header: "Fertilizer Amount",
+    cell: ({ row }) => {
+      const fertilizer_amount = row.getValue<number>("fertilizer_amount");
+      return <div className="text-left">{fertilizer_amount}</div>;
     },
   },
 
