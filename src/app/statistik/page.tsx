@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Navigation, Footer } from "@/components";
-import Dashboard from "./Dashboard";
+import Statistik from "./Statistik";
 import api from "@/hooks/apiService";
 import { ApiData } from "./types";
 
@@ -58,7 +58,7 @@ function Page() {
       <Navigation />
       <div className="flex-1 p-4">
         {!loading ? (
-          <Dashboard apiData={dataVegetable} />
+          <Statistik apiData={dataVegetable} />
         ) : (
           <div className="text-center py-10">
             <p>Data Anda sedang Dimuat...</p>
