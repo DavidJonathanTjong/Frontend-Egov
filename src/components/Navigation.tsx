@@ -23,15 +23,10 @@ const navItems = [
   {
     id: 4,
     text: "Peta Sebaran",
-    link: "#",
-  },
-  {
-    id: 5,
-    text: "Profil",
     link: "/profile",
   },
   {
-    id: 6,
+    id: 5,
     text: "coba dashboard",
     link: "/dashboard/admin",
   },

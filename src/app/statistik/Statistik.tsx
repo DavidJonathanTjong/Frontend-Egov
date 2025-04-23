@@ -206,12 +206,12 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
       </div>
 
       {/* Peta dengan MapLibre GL JS */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h2 className="text-xl font-semibold mb-2">
           Peta Provinsi dengan Data
         </h2>
         <MapLibreMap geoJsonData={updatedGeoJson} />
-      </div>
+      </div> */}
     </div>
   );
 };
