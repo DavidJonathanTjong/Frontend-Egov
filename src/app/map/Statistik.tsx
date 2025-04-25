@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Pie, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -93,48 +92,6 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
     };
   }, [filteredData]);
 
-  // Data untuk Diagram Lingkaran (Pie Chart)
-  const pieData = () => {
-    const grouped: { [key: string]: number } = {};
-    filteredData.forEach((item) => {
-      grouped[item.vegetable] =
-        (grouped[item.vegetable] || 0) + item.production;
-    });
-    return {
-      labels: Object.keys(grouped),
-      datasets: [
-        {
-          data: Object.values(grouped),
-          backgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56",
-            "#8BC34A",
-            "#FF9800",
-          ],
-        },
-      ],
-    };
-  };
-
-  // Data untuk Diagram Batang (Bar Chart)
-  const barData = () => {
-    const grouped: { [key: string]: number } = {};
-    filteredData.forEach((item) => {
-      grouped[item.year] = (grouped[item.year] || 0) + item.production;
-    });
-    return {
-      labels: Object.keys(grouped),
-      datasets: [
-        {
-          label: "Production",
-          data: Object.values(grouped),
-          backgroundColor: "#42A5F5",
-        },
-      ],
-    };
-  };
-
   return (
     <div className="container mx-auto text-center items-center p-4">
       <h1 className="text-2xl font-bold mb-4">Dashboard Data Produksi</h1>
@@ -174,36 +131,6 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
           </select>
         </label>
       </div>
-
-      {/* Diagram Lingkaran */}
-      {/* <div
-        className="mb-8"
-        style={{ width: "60%", height: "60%", margin: "auto" }}
-      >
-        <h2 className="text-xl font-semibold mb-2">
-          Diagram Lingkaran Vegetable
-        </h2>
-        <Pie data={pieData()} />
-      </div> */}
-
-      {/* Diagram Batang */}
-      {/* <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">
-          Gugus Diagram Batang Production by Year
-        </h2>
-        <Bar
-          data={barData()}
-          options={{
-            scales: {
-              x: { title: { display: true, text: "Year" } },
-              y: {
-                beginAtZero: true,
-                title: { display: true, text: "Production" },
-              },
-            },
-          }}
-        />
-      </div> */}
 
       {/* Peta dengan MapLibre GL JS */}
       <div className="mb-8">

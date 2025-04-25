@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import api from "@/hooks/apiService";
+import toast from "react-hot-toast";
 
 const menuItems = [
   {
@@ -58,25 +60,22 @@ const Menu = () => {
   const router = useRouter();
 
   const onLogOutHandler = async () => {
+    const toastId = toast.loading("Logging out...");
     try {
       const token = Cookies.get("token");
-      if (!token) return;
-
-      const response = await fetch("http://localhost:8000/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        Cookies.remove("token");
-        router.push("/login");
-      } else {
-        console.error("Logout gagal:", response.statusText);
+      if (!token) {
+        toast.dismiss(toastId);
+        return;
       }
+      await api.post("/auth/logout");
+      Cookies.remove("token");
+      Cookies.remove("refresh_token");
+      toast.dismiss(toastId);
+      router.push("/login");
     } catch (error) {
+      toast.error("Terjadi kesalahan saat logout", {
+        id: toastId,
+      });
       console.error("Terjadi kesalahan saat logout:", error);
     }
   };

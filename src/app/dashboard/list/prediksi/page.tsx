@@ -34,6 +34,10 @@ function PrediksiPage() {
     production: number;
     fertilizer_type: string;
     fertilizer_amount: number;
+    clustering: {
+      cluster: number;
+      meaning: string;
+    };
   }>(null);
 
   const [predictionInfo, setPredictionInfo] = useState<typeof formData | null>(
@@ -274,6 +278,10 @@ function PrediksiPage() {
               </span>{" "}
               ton.
             </p>
+            <div className="mt-4">
+              <p className="font-semibold">Karakteristik Klaster:</p>
+              <p className="mt-1 ">{predictionResult.clustering.meaning}</p>
+            </div>
           </div>
         </div>
       )}

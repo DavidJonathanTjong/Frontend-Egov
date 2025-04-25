@@ -12,9 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import MapLibreMap from "./MapLibreMap";
-import { ApiData, GeoJSONFeatureCollection, Province } from "./types";
-import provincesData from "@/assets/provinces.json";
+import { ApiData } from "./types";
 
 // Registrasi komponen Chart.js
 ChartJS.register(
@@ -26,25 +24,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-// Konversi data provinsi menjadi GeoJSON FeatureCollection
-const initialGeoJson: GeoJSONFeatureCollection = {
-  type: "FeatureCollection",
-  features: (provincesData as Province[]).map((province) => ({
-    type: "Feature",
-    properties: {
-      id: province.id,
-      name: province.name,
-      alt_name: province.alt_name,
-      hasData: false,
-      production: 0,
-    },
-    geometry: {
-      type: "Point",
-      coordinates: [province.longitude, province.latitude],
-    },
-  })),
-};
 
 interface DashboardProps {
   apiData: ApiData[];
@@ -67,31 +46,6 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
 
     return data;
   }, [selectedVegetable, selectedProvince, apiData]);
-
-  // Update GeoJSON dengan properti berdasarkan data API
-  const updatedGeoJson = useMemo<GeoJSONFeatureCollection>(() => {
-    return {
-      ...initialGeoJson,
-      features: initialGeoJson.features.map((feature) => {
-        const provinceName = feature.properties.name.toUpperCase();
-        const records = filteredData.filter(
-          (item) => item.province.toUpperCase() === provinceName
-        );
-        const totalProduction = records.reduce(
-          (sum, item) => sum + item.production,
-          0
-        );
-        return {
-          ...feature,
-          properties: {
-            ...feature.properties,
-            hasData: records.length > 0,
-            production: totalProduction,
-          },
-        };
-      }),
-    };
-  }, [filteredData]);
 
   // Data untuk Diagram Lingkaran (Pie Chart)
   const pieData = () => {
@@ -204,14 +158,6 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
           }}
         />
       </div>
-
-      {/* Peta dengan MapLibre GL JS */}
-      {/* <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">
-          Peta Provinsi dengan Data
-        </h2>
-        <MapLibreMap geoJsonData={updatedGeoJson} />
-      </div> */}
     </div>
   );
 };

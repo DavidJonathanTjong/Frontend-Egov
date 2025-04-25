@@ -33,7 +33,7 @@ export default function HeroSection() {
         <div className="lg:w-1/2 relative lg:h-auto max-w-2xl md:max-w-3xl mx-auto hidden md:flex justify-end">
           <div className="relative w-full h-full max-sm:hidden flex items-center aspect-square overflow-hidden lg:aspect-auto">
             <Image
-              src="/images/banjarbaru_monumen.jpg"
+              src="/beranda.jpg"
               width={1266}
               height={1224}
               alt="Monumen Kota Banjarbaru"

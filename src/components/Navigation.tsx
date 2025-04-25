@@ -23,12 +23,7 @@ const navItems = [
   {
     id: 4,
     text: "Peta Sebaran",
-    link: "/profile",
-  },
-  {
-    id: 5,
-    text: "coba dashboard",
-    link: "/dashboard/admin",
+    link: "/map",
   },
 ];
 const Navigation = () => {
