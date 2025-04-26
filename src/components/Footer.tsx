@@ -7,16 +7,18 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-wrap justify-between gap-5">
         {/* Bagian Logo dan Deskripsi */}
         <div className="flex flex-col items-start gap-4">
-          <Image
-            src="/logo.png" // Ganti dengan path logo yang sesuai
-            alt="Logo"
-            width={150}
-            height={40}
-            className="object-contain"
-          />
+          <span className="h-25 rounded-l-full flex ">
+            <Image
+              src="/logo.png" // Ganti dengan path logo yang sesuai
+              alt="Logo"
+              width={150}
+              height={40}
+              className="object-contain"
+            />
+          </span>
           <p className="text-sm">
-            Dinas Pertanian & Kependudukan <br />
-            Banjarbaru, Indonesia.
+            Electronic Agriculture Statistics <br />
+            Universitas Lambung, Indonesia.
           </p>
         </div>
 
@@ -51,7 +53,7 @@ const Footer = () => {
       {/* Bagian Copyright */}
       <div className="border-t border-gray-300 py-4 text-center">
         <p className="text-sm">
-          &copy; {new Date().getFullYear()} Data Statistik Banjarbaru. All
+          &copy; {new Date().getFullYear()} Data Statistik Produksi Pertanian Indonesia. All
           Rights Reserved.
         </p>
       </div>
