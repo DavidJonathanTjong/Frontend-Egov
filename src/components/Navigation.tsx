@@ -70,9 +70,14 @@ const Navigation = () => {
         <nav className="relative mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5 flex gap-x-5 justify-between items-center">
           <div className="flex items-center min-w-max">
             <Link href="#" className="font-semibold flex items-center gap-x-2">
-              <span className="flex">
-                <span className="w-3 h-6 rounded-l-full flex bg-blue-600" />
-                <span className="w-3 h-6 rounded-r-full flex bg-teal-400 mt-2" />
+              <span className="h-16 rounded-l-full flex ">
+                <img src="/logo.png" // Ganti dengan path logo yang sesuai
+                  alt="Logo"
+                  width={150}
+                  height={40}
+                  className="object-contain"/>
+                {/* <span className="w-3 h-6 rounded-l-full flex bg-blue-600" />
+                <span className="w-3 h-6 rounded-r-full flex bg-teal-400 mt-2" /> */}
               </span>
               <span
                 className={`text-lg ${
@@ -81,7 +86,7 @@ const Navigation = () => {
                     : "text-gray-700 dark:text-gray-300"
                 }`}
               >
-                Hydra
+                E-Agristat
               </span>
             </Link>
           </div>
