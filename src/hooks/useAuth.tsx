@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import toast from "react-hot-toast";
 import api from "./apiService";
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
 // The example of using apiService in a component
 // import React, { useEffect, useState } from "react";
@@ -36,7 +41,7 @@ import api from "./apiService";
 
 const useAuth = () => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [shouldRedirect, setShouldRedirect] = useState(false);
 

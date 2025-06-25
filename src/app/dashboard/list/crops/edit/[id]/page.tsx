@@ -24,7 +24,7 @@ const CropsUpdatePage = () => {
   });
   const [message, setMessage] = useState("");
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -32,14 +32,14 @@ const CropsUpdatePage = () => {
     }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const token = Cookies.get("token");
 
       const res = await axios.put(
-        `http://127.0.0.1:8000/api/crops/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/crops/${id}`,
         form,
         {
           headers: {

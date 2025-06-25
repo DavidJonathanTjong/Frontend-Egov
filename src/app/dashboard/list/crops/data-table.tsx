@@ -53,6 +53,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
 }
 
+interface FilterParams {
+  page: number;
+  pageLength: number;
+  province?: string;
+  year?: string;
+  vegetable?: string;
+}
+
 export function DataTable<TData, TValue>({
   columns,
 }: DataTableProps<TData, TValue>) {
@@ -89,7 +97,7 @@ export function DataTable<TData, TValue>({
     setIsLoading(true);
     try {
       const totalCount = await fetchTotalCount();
-      const params: any = {
+      const params: FilterParams = {
         page: 1,
         pageLength: totalCount,
       };

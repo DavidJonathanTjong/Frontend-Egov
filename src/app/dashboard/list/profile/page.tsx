@@ -3,16 +3,24 @@
 import React, { useState, useEffect } from "react";
 import useInput from "@/hooks/useInput";
 import Image from "next/image";
-import Link from "next/link";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import showFormattedDate from "@/utils/formatedData";
 import api from "@/hooks/apiService";
+
+type DecodedToken = {
+  sub: string;
+};
+
+type User = {
+  kode_pegawai: string;
+  name: string;
+  email: string;
+  created_at: string;
+};
 
 const SingleTeacherPage = () => {
   const [name, setName] = useInput("");
@@ -23,7 +31,7 @@ const SingleTeacherPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
-  const [imageFileName, setImageFileName] = useState<string | null>(null);
+  const [, setImageFileName] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState("/images/avatar.png");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -33,7 +41,7 @@ const SingleTeacherPage = () => {
   useEffect(() => {
     if (!token) return;
     try {
-      const decodedToken: any = jwtDecode(token);
+      const decodedToken: DecodedToken = jwtDecode(token);
       const pegawai = decodedToken.sub;
       setKodePegawai(pegawai);
     } catch (err) {
@@ -113,7 +121,7 @@ const SingleTeacherPage = () => {
         console.log(response);
 
         const userData = response.data.data.find(
-          (user: any) => user.kode_pegawai === kodePegawai
+          (user: User) => user.kode_pegawai === kodePegawai
         );
 
         if (userData) {
@@ -336,7 +344,7 @@ const SingleTeacherPage = () => {
                   return;
                 try {
                   await axios.delete(
-                    `${process.env.NEXT_PUBLIC_API_BACKEND}/api/users/delete/${kodePegawai}`,
+                    `${process.env.NEXT_PUBLIC_API_BACKEND}/users/delete/${kodePegawai}`,
                     {
                       headers: { Authorization: `Bearer ${token}` },
                     }

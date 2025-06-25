@@ -1,4 +1,4 @@
-const showFormattedDate = (date: any) => {
+const showFormattedDate = (date: string | number | Date) => {
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",

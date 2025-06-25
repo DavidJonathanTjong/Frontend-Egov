@@ -12,7 +12,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -31,6 +30,71 @@ export type DataPopulasiBanjarbaru = {
   fertilizer_type: number;
   fertilizer_amount: number;
 };
+
+function ActionsCell({ row }: { row: any }) {
+  const crops = row.original;
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
+      try {
+        const token = Cookies.get("token");
+        const response = await fetch(
+          `http://127.0.0.1:8000/crops/${crops.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Gagal menghapus data crops");
+        }
+
+        alert("Data crops berhasil dihapus!");
+        window.location.reload();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Terjadi kesalahan saat menghapus crops.");
+      }
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onClick={() =>
+            router.push(
+              `/dashboard/list/crops/edit/${crops.id}?year=${
+                crops.year
+              }&province=${encodeURIComponent(
+                crops.province
+              )}&vegetable=${encodeURIComponent(crops.vegetable)}&production=${
+                crops.production
+              }`
+            )
+          }
+        >
+          Edit Data
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleDelete}>
+          Hapus Data Crops
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
   {
@@ -69,7 +133,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
       );
     },
     cell: ({ row }) => {
-      const province = row.getValue<String>("province");
+      const province = row.getValue<string>("province");
       return <div className="text-left ml-4 font-medium">{province}</div>;
     },
   },
@@ -78,7 +142,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     accessorKey: "year",
     header: "Tahun",
     cell: ({ row }) => {
-      const year = row.getValue<String>("year");
+      const year = row.getValue<string>("year");
       return <div className="text-left">{year}</div>;
     },
   },
@@ -87,7 +151,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     accessorKey: "vegetable",
     header: "Jenis Sayuran",
     cell: ({ row }) => {
-      const vegetable = row.getValue<String>("vegetable");
+      const vegetable = row.getValue<string>("vegetable");
       return <div className="text-left">{vegetable}</div>;
     },
   },
@@ -136,68 +200,6 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
   {
     id: "actions",
     header: "Action",
-    cell: ({ row }) => {
-      const crops = row.original;
-      const router = useRouter();
-
-      const handleDelete = async () => {
-        if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
-          try {
-            const token = Cookies.get("token");
-            const response = await fetch(
-              `http://127.0.0.1:8000/api/crops/${crops.id}`,
-              {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            if (!response.ok) {
-              throw new Error("Gagal menghapus data crops");
-            }
-            alert("Data crops berhasil dihapus!");
-            window.location.reload();
-          } catch (error) {
-            console.error("Error:", error);
-            alert("Terjadi kesalahan saat menghapus crops.");
-          }
-        }
-      };
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(
-                  `/dashboard/list/crops/edit/${crops.id}?year=${
-                    crops.year
-                  }&province=${encodeURIComponent(
-                    crops.province
-                  )}&vegetable=${encodeURIComponent(
-                    crops.vegetable
-                  )}&production=${crops.production}`
-                )
-              }
-            >
-              Edit Data
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleDelete}>
-              Hapus Data Crops
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: (props) => <ActionsCell {...props} />,
   },
 ];

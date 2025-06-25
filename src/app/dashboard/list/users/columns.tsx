@@ -2,14 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import Cookies from "js-cookie";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -68,7 +66,7 @@ export const columns = (
       );
     },
     cell: ({ row }) => {
-      const kodePegawai = row.getValue<String>("kodePegawai");
+      const kodePegawai = row.getValue<string>("kodePegawai");
       return <div className="text-left ml-4 font-medium">{kodePegawai}</div>;
     },
   },
@@ -77,7 +75,7 @@ export const columns = (
     accessorKey: "name",
     header: "Nama Pegawai",
     cell: ({ row }) => {
-      const name = row.getValue<String>("name");
+      const name = row.getValue<string>("name");
       return <div className="text-left">{name}</div>;
     },
   },
@@ -86,7 +84,7 @@ export const columns = (
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => {
-      const email = row.getValue<String>("email");
+      const email = row.getValue<string>("email");
       return <div className="text-left">{email}</div>;
     },
   },
@@ -95,7 +93,7 @@ export const columns = (
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
-      const createdAt = row.getValue<String>("createdAt");
+      const createdAt = row.getValue<string>("createdAt");
       return <div className="text-left">{createdAt}</div>;
     },
   },
@@ -103,7 +101,7 @@ export const columns = (
     accessorKey: "updatedAt",
     header: "Updated At",
     cell: ({ row }) => {
-      const updatedAt = row.getValue<String>("updatedAt");
+      const updatedAt = row.getValue<string>("updatedAt");
       return <div className="text-left">{updatedAt}</div>;
     },
   },

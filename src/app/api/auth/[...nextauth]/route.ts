@@ -1,7 +1,9 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import type { JWT } from "next-auth/jwt";
+import type { Session } from "next-auth";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -21,10 +23,10 @@ export const authOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         // Add logic here to look up the user from the credentials supplied
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/auth/login`,
+          `${process.env.NEXT_PUBLIC_API_BACKEND}/auth/login`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -48,14 +50,14 @@ export const authOptions = {
     // ...add more providers here
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
         token.accessToken = user.token;
       }
       return token;
     },
-    async session({ session, token }: any) {
-      session.accessToken = token.accessToken;
+    async session({ session, token }: { session: Session; token: JWT }) {
+      (session as any).accessToken = token.accessToken;
       return session;
     },
   },

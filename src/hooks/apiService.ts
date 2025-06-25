@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { jwtDecode } from "jwt-decode";
 // import { createUserStore } from "../app/data/UserStore"; // Import the UserStore
 
 // const { setUser } = createUserStore(); // Create the user store instance
@@ -53,11 +52,10 @@ api.interceptors.response.use(
 
         try {
           const refreshToken = Cookies.get("refresh_token");
-          const response = await api.post("/auth/refresh", {
+          const { data } = await api.post("/auth/refresh", {
             refresh_token: refreshToken,
           });
-
-          const newToken = response.data.token;
+          const newToken = data.token;
           Cookies.set("token", newToken);
           onRefreshed(newToken);
           isRefreshing = false;
@@ -85,16 +83,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// Function to fetch user data
-export const fetchUserData = async (token: string) => {
-  try {
-    const response = await api.get(`/users/list/${jwtDecode(token).sub}`); // Adjust the endpoint as needed
-    // setUser(response.data); // Update the user store with the fetched data
-  } catch (error) {
-    console.error("Failed to fetch user data", error);
-    throw error;
-  }
-};
 
 export default api;

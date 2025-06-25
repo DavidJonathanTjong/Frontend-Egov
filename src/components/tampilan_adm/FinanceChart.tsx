@@ -32,6 +32,11 @@ interface CropData {
   vegetable: string;
 }
 
+interface CropYearData {
+  year: number;
+  production: number;
+}
+
 const ProductionChart = () => {
   const [formData, setFormData] = useState({
     province: "",
@@ -77,7 +82,7 @@ const ProductionChart = () => {
           label: province,
         }));
         setProvinces(uniqueProvinces);
-      } catch (error) {
+      } catch {
         toast.error("Gagal memuat daftar provinsi");
       } finally {
         setIsLoading((prev) => ({ ...prev, provinces: false }));
@@ -95,7 +100,7 @@ const ProductionChart = () => {
           label: vegetable,
         }));
         setVegetables(uniqueVegetables);
-      } catch (error) {
+      } catch {
         toast.error("Gagal memuat daftar sayuran");
       } finally {
         setIsLoading((prev) => ({ ...prev, vegetables: false }));
@@ -122,7 +127,7 @@ const ProductionChart = () => {
 
       setIsLoading((prev) => ({ ...prev, chart: true }));
       try {
-        let allData: any[] = [];
+        let allData: CropYearData[] = [];
         let page = 1;
         let lastPage = 1;
 
@@ -147,7 +152,7 @@ const ProductionChart = () => {
         }));
 
         setChartData(formattedData);
-      } catch (error) {
+      } catch {
         toast.error("Gagal memuat data produksi");
       } finally {
         setIsLoading((prev) => ({ ...prev, chart: false }));

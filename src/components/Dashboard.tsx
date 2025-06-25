@@ -355,20 +355,21 @@ const Dashboard: React.FC<{ apiData: ApiData[] }> = ({ apiData }) => {
   );
 };
 
-export async function getServerSideProps() {
-  const apiKey = "http://localhost:8000/api/crops";
-  const res = await fetch(apiKey);
-  const dataJson = await res.json();
+interface ApiData {
+  id: string;
+  year: string;
+  province: string;
+  production: number;
+}
 
-  const apiData = dataJson.data ?? [];
+export async function getServerSideProps() {
+  const apiKey = `${process.env.NEXT_PUBLIC_API_BACKEND}/crops`;
+  const res = await fetch(apiKey);
+  const dataJson: { data: ApiData[] } = await res.json();
+
   return {
     props: {
-      apiData: apiData.map((item: any) => ({
-        id: item.id,
-        year: item.year,
-        province: item.province,
-        production: item.production,
-      })),
+      apiData: dataJson.data,
     },
   };
 }

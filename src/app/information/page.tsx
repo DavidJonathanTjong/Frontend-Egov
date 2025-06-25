@@ -1,4 +1,4 @@
-import { DataPopulasiBanjarbaru, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Navigation, Footer } from "@/components";
 

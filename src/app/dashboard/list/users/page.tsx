@@ -9,6 +9,14 @@ import showFormattedDate from "@/utils/formatedData";
 import { useForm } from "react-hook-form";
 import api from "@/hooks/apiService";
 
+type UserAPIResponse = {
+  kode_pegawai: string;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
+
 const UserListPage = () => {
   const [data, setData] = useState<DataPegawaiKedinasan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +28,6 @@ const UserListPage = () => {
     handleSubmit,
     reset,
     setValue,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -37,7 +44,7 @@ const UserListPage = () => {
       const dataJson = response.data;
       console.log("Response:", dataJson);
       setData(
-        dataJson.data?.map((item: any) => ({
+        dataJson.data?.map((item: UserAPIResponse) => ({
           kodePegawai: item.kode_pegawai,
           name: item.name,
           email: item.email,
@@ -72,7 +79,7 @@ const UserListPage = () => {
     }
   };
 
-  const onSubmit = async (formData: any) => {
+  const onSubmit = async (formData: Record<string, any>) => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("kode_pegawai", formData.kode_pegawai);
@@ -97,12 +104,16 @@ const UserListPage = () => {
       } else {
         alert(`Gagal: ${response.data.message}`);
       }
-    } catch (error: any) {
-      console.error("Terjadi kesalahan:", error);
-      const message =
-        error?.response?.data?.message ||
-        "Terjadi kesalahan saat mengirim data.";
-      alert(message);
+    } catch (error: unknown) {
+      if (error && typeof error === "object" && "response" in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        const message =
+          err.response?.data?.message ??
+          "Terjadi kesalahan saat mengirim data.";
+        alert(message);
+      } else {
+        alert("Terjadi kesalahan yang tidak diketahui.");
+      }
     }
   };
 

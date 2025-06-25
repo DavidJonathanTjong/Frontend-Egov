@@ -20,14 +20,6 @@ export default function HeroSection() {
             Suatu Upaya Untuk Berkontribusi Terhadap Swasembada Pangan Melalui
             Kecerdasan Buatan
           </p>
-          <div className="mt-4 md:mt-8 flex flex-col sm:flex-row justify-center lg:justify-start gap-3 md:gap-4 max-w-md mx-auto lg:mx-0">
-            <Link
-              href="#"
-              className="flex items-center justify-center py-3 max-sm:hidden px-6 border-2 border-transparent shadow-lg bg-blue-600 transition ease-linear hover:bg-blue-800 active:bg-blue-700 text-white rounded-full"
-            >
-              Prediksi Machine Learning
-            </Link>
-          </div>
         </div>
 
         <div className="lg:w-1/2 relative lg:h-auto max-w-2xl md:max-w-3xl mx-auto hidden md:flex justify-end">

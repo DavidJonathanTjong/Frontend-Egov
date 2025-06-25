@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import api from "@/apiService";
 
@@ -52,8 +51,12 @@ const CropsAddPage = () => {
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Terjadi kesalahan.");
+      }
     } finally {
       setLoading(false);
     }

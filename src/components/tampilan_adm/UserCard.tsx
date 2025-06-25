@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const UserCard = ({ type, count }: { type: string; count: number }) => {
   const d = new Date();
-  let year = d.getFullYear();
+  const year = d.getFullYear();
   return (
     <div className="rounded-2xl odd:bg-lamaPurple even:bg-lamaYellow p-4 flex-1 min-w-[130px]">
       <div className="flex justify-between items-center">

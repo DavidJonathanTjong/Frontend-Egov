@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Navigation, Footer } from "@/components";
+import React, { useEffect } from "react";
+import { Navigation } from "@/components";
 import Image from "next/image";
 import useInput from "@/hooks/useInput";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";

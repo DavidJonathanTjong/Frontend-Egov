@@ -54,7 +54,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
       );
     },
     cell: ({ row }) => {
-      const province = row.getValue<String>("province");
+      const province = row.getValue<string>("province");
       return <div className="text-left ml-4 font-medium">{province}</div>;
     },
   },
@@ -63,7 +63,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     accessorKey: "year",
     header: "Tahun",
     cell: ({ row }) => {
-      const year = row.getValue<String>("year");
+      const year = row.getValue<string>("year");
       return <div className="text-left">{year}</div>;
     },
   },
@@ -72,7 +72,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
     accessorKey: "vegetable",
     header: "Jenis Sayuran",
     cell: ({ row }) => {
-      const vegetable = row.getValue<String>("vegetable");
+      const vegetable = row.getValue<string>("vegetable");
       return <div className="text-left">{vegetable}</div>;
     },
   },

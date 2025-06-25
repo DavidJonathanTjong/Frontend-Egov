@@ -1,5 +1,5 @@
 import { DataTable } from "./data-table";
-import { DataPopulasiBanjarbaru, columns } from "./columns";
+import { columns } from "./columns";
 import Link from "next/link";
 import Image from "next/image";
 
