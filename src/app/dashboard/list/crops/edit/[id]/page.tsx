@@ -39,7 +39,7 @@ const CropsUpdatePage = () => {
       const token = Cookies.get("token");
 
       const res = await axios.put(
-        `http://127.0.0.1:8000/api/crops/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/crops/${id}`,
         form,
         {
           headers: {

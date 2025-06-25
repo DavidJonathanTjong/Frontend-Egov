@@ -356,7 +356,7 @@ const Dashboard: React.FC<{ apiData: ApiData[] }> = ({ apiData }) => {
 };
 
 export async function getServerSideProps() {
-  const apiKey = "http://localhost:8000/api/crops";
+  const apiKey = `${process.env.NEXT_PUBLIC_API_BACKEND}/crops`;
   const res = await fetch(apiKey);
   const dataJson = await res.json();
 

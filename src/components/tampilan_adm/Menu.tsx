@@ -62,7 +62,7 @@ const Menu = () => {
       const token = Cookies.get("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:8000/api/auth/logout", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BACKEND}/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

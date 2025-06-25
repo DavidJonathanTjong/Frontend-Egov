@@ -3,14 +3,14 @@ import { DataTable } from "./data-table";
 import { Navigation, Footer } from "@/components";
 
 // async function fetchTotalCount() {
-//   const apiKey = "http://127.0.0.1:8000/api/statistik/client?page=1";
+//   const apiKey = "${process.env.NEXT_PUBLIC_API_BACKEND}/statistik/client?page=1";
 //   const response = await fetch(apiKey);
 //   const dataJson = await response.json();
 //   return dataJson.pagination?.total ?? 0; // Ambil total jumlah data
 // }
 
 // async function getData(total: number): Promise<DataPopulasiBanjarbaru[]> {
-//   const apiKey = `http://127.0.0.1:8000/api/statistik/client?page=1&pageLength=${total}`;
+//   const apiKey = `${process.env.NEXT_PUBLIC_API_BACKEND}/statistik/client?page=1&pageLength=${total}`;
 //   const dataJson = await fetch(apiKey).then((res) => res.json());
 //   console.log(dataJson);
 //   const apiData = dataJson.data ?? [];

@@ -145,7 +145,7 @@ export const columns: ColumnDef<DataPopulasiBanjarbaru>[] = [
           try {
             const token = Cookies.get("token");
             const response = await fetch(
-              `http://127.0.0.1:8000/api/crops/${crops.id}`,
+              `http://127.0.0.1:8000/crops/${crops.id}`,
               {
                 method: "DELETE",
                 headers: {

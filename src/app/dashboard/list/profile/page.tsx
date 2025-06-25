@@ -336,7 +336,7 @@ const SingleTeacherPage = () => {
                   return;
                 try {
                   await axios.delete(
-                    `${process.env.NEXT_PUBLIC_API_BACKEND}/api/users/delete/${kodePegawai}`,
+                    `${process.env.NEXT_PUBLIC_API_BACKEND}/users/delete/${kodePegawai}`,
                     {
                       headers: { Authorization: `Bearer ${token}` },
                     }
