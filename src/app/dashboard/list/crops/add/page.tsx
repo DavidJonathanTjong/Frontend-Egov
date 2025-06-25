@@ -31,7 +31,7 @@ const CropsAddPage = () => {
     try {
       // const token = Cookies.get("token");
 
-      // const res = await fetch("http://127.0.0.1:8000/api/crops", {
+      // const res = await fetch("http://127.0.0.1:8000/crops", {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -95,8 +95,12 @@ const CropsAddPage = () => {
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Terjadi kesalahan.");
+      }
     } finally {
       setLoading(false);
     }

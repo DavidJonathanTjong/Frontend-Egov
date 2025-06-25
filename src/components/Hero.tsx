@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 
 export default function HeroSection() {
@@ -10,7 +9,8 @@ export default function HeroSection() {
       <div className="relative mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5 py-12 md:py-24 lg:py-4 flex flex-col-reverse md:flex-col lg:flex-row lg:items-center gap-6 md:gap-10">
         <div className="lg:w-1/2 text-center lg:text-left max-w-2xl md:max-w-3xl mx-auto flex flex-col items-center md:items-start">
           <h1 className="font-semibold text-teal-950 dark:text-white font-display text-3xl md:text-5xl lg:text-5xl">
-              Sistem E-Government Berbasis Data untuk Wawasan Produksi Tanaman Sayuran {" "}
+            Sistem E-Government Berbasis Data untuk Wawasan Produksi Tanaman
+            Sayuran{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-br from-teal-600 to-blue-600">
               Seluruh Provinsi Indonesia
             </span>

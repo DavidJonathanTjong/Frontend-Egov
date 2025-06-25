@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { jwtDecode } from "jwt-decode";
 // import { createUserStore } from "../app/data/UserStore"; // Import the UserStore
 
 // const { setUser } = createUserStore(); // Create the user store instance

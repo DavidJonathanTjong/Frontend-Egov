@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import api from "@/hooks/apiService";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -39,23 +40,18 @@ function ActionsCell({ row }: { row: any }) {
     if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
       try {
         const token = Cookies.get("token");
-        const response = await fetch(
-          `http://127.0.0.1:8000/crops/${crops.id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await api.delete(`/crops/${crops.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        if (!response.ok) {
+        if (response.status >= 200 && response.status < 300) {
+          alert("Data crops berhasil dihapus!");
+          window.location.reload();
+        } else {
           throw new Error("Gagal menghapus data crops");
         }
-
-        alert("Data crops berhasil dihapus!");
-        window.location.reload();
       } catch (error) {
         console.error("Error:", error);
         alert("Terjadi kesalahan saat menghapus crops.");

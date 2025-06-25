@@ -17,6 +17,15 @@ type UserAPIResponse = {
   updated_at: string;
 };
 
+interface RegisterFormInput {
+  kode_pegawai: string;
+  name: string;
+  email: string;
+  password: string;
+  confirm: string;
+  img_profile?: File;
+}
+
 const UserListPage = () => {
   const [data, setData] = useState<DataPegawaiKedinasan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +38,7 @@ const UserListPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<RegisterFormInput>();
 
   const fetchData = async () => {
     const token = Cookies.get("token");
@@ -79,7 +88,7 @@ const UserListPage = () => {
     }
   };
 
-  const onSubmit = async (formData: Record<string, any>) => {
+  const onSubmit = async (formData: RegisterFormInput) => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("kode_pegawai", formData.kode_pegawai);

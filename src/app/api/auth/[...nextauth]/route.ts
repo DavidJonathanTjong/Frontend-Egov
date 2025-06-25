@@ -2,8 +2,6 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import type { JWT } from "next-auth/jwt";
-import type { Session } from "next-auth";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -49,18 +47,6 @@ export const authOptions = {
 
     // ...add more providers here
   ],
-  callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: any }) {
-      if (user) {
-        token.accessToken = user.token;
-      }
-      return token;
-    },
-    async session({ session, token }: { session: Session; token: JWT }) {
-      (session as any).accessToken = token.accessToken;
-      return session;
-    },
-  },
   pages: {
     signIn: "/login",
   },
