@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Row } from "@tanstack/react-table";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -32,7 +33,7 @@ export type DataPopulasiBanjarbaru = {
   fertilizer_amount: number;
 };
 
-function ActionsCell({ row }: { row: any }) {
+function ActionsCell({ row }: { row: Row<DataPopulasiBanjarbaru> }) {
   const crops = row.original;
   const router = useRouter();
 
