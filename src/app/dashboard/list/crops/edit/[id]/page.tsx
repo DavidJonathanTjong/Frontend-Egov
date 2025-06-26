@@ -3,12 +3,37 @@
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import api from "@/hooks/apiService";
+import { AxiosError } from "axios";
+
+interface CropForm {
+  year: string;
+  province: string;
+  vegetable: string;
+  production: string;
+  planted_area: string;
+  harvested_area: string;
+  fertilizer_type: string;
+  fertilizer_amount: string;
+}
+
+interface CropResponse {
+  data: {
+    year: number;
+    province: string;
+    vegetable: string;
+    production: number;
+    planted_area: number;
+    harvested_area: number;
+    fertilizer_type: string;
+    fertilizer_amount: number;
+  };
+}
 
 const CropsUpdatePage = () => {
   const { id } = useParams();
   const router = useRouter();
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<CropForm>({
     year: "",
     province: "",
     vegetable: "",
@@ -21,11 +46,10 @@ const CropsUpdatePage = () => {
 
   const [message, setMessage] = useState("");
 
-  // Ambil data crop dari API saat halaman dibuka
   useEffect(() => {
     const fetchCrop = async () => {
       try {
-        const res = await api.get(`/crops/${id}`);
+        const res = await api.get<CropResponse>(`/crops/${id}`);
         const data = res.data.data;
 
         setForm({
@@ -38,7 +62,7 @@ const CropsUpdatePage = () => {
           fertilizer_type: data.fertilizer_type,
           fertilizer_amount: data.fertilizer_amount.toString(),
         });
-      } catch (err: any) {
+      } catch (err: unknown) {
         setMessage("Gagal mengambil data tanaman.");
         console.error(err);
       }
@@ -63,9 +87,10 @@ const CropsUpdatePage = () => {
       await api.put(`/crops/${id}`, form);
       alert("Data berhasil diperbarui.");
       router.push("/dashboard/list/crops");
-    } catch (err: any) {
-      if (err.response?.data?.message) {
-        setMessage(err.response.data.message);
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message?: string }>;
+      if (error.response?.data?.message) {
+        setMessage(error.response.data.message);
       } else {
         setMessage("Gagal memperbarui data.");
       }
@@ -79,22 +104,28 @@ const CropsUpdatePage = () => {
       {message && <p className="mb-2 text-red-500">{message}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {[
-          { label: "Tahun", name: "year", type: "number" },
-          { label: "Provinsi", name: "province", type: "text" },
-          { label: "Sayur", name: "vegetable", type: "text" },
-          { label: "Produksi (ton)", name: "production", type: "number" },
-          { label: "Luas Tanam", name: "planted_area", type: "number" },
-          { label: "Luas Panen", name: "harvested_area", type: "number" },
-          { label: "Jenis Pupuk", name: "fertilizer_type", type: "text" },
-          { label: "Jumlah Pupuk", name: "fertilizer_amount", type: "number" },
-        ].map(({ label, name, type }) => (
+        {(
+          [
+            { label: "Tahun", name: "year", type: "number" },
+            { label: "Provinsi", name: "province", type: "text" },
+            { label: "Sayur", name: "vegetable", type: "text" },
+            { label: "Produksi (ton)", name: "production", type: "number" },
+            { label: "Luas Tanam", name: "planted_area", type: "number" },
+            { label: "Luas Panen", name: "harvested_area", type: "number" },
+            { label: "Jenis Pupuk", name: "fertilizer_type", type: "text" },
+            {
+              label: "Jumlah Pupuk",
+              name: "fertilizer_amount",
+              type: "number",
+            },
+          ] as const
+        ).map(({ label, name, type }) => (
           <div key={name}>
             <label className="block font-medium">{label}</label>
             <input
               type={type}
               name={name}
-              value={(form as any)[name]}
+              value={form[name]}
               onChange={handleChange}
               className="border p-2 rounded w-full"
               required

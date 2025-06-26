@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/apiService";
+import { AxiosError } from "axios";
 
 const initialFormState = {
   year: "",
@@ -34,16 +35,16 @@ const CropsAddPage = () => {
     setMessage("");
 
     try {
-      const res = await api.post("/crops", form);
-
+      await api.post("/crops", form);
       setMessage("Data berhasil ditambahkan.");
       setForm(initialFormState);
 
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: any) {
-      setMessage(err.response?.data?.message || "Terjadi kesalahan.");
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      setMessage(error.response?.data?.message || "Terjadi kesalahan.");
     } finally {
       setLoading(false);
     }
@@ -77,9 +78,10 @@ const CropsAddPage = () => {
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
       setMessage(
-        err.response?.data?.message || "Terjadi kesalahan saat import."
+        error.response?.data?.message || "Terjadi kesalahan saat import."
       );
     } finally {
       setLoading(false);
