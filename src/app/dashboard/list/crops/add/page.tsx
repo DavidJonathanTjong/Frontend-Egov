@@ -35,11 +35,16 @@ const CropsAddPage = () => {
     setMessage("");
 
     try {
-      await api.post("/crops", form, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const preparedData = {
+        ...form,
+        year: parseInt(form.year),
+        planted_area: parseFloat(form.planted_area),
+        harvested_area: parseFloat(form.harvested_area),
+        fertilizer_amount: parseFloat(form.fertilizer_amount),
+        production: parseFloat(form.production),
+      };
+
+      await api.post("/crops", preparedData);
       setMessage("Data berhasil ditambahkan.");
       setForm(initialFormState);
 
