@@ -4,14 +4,19 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/apiService";
 
-const CropsAddPage = () => {
-  const [form, setForm] = useState({
-    year: "",
-    province: "",
-    vegetable: "",
-    production: "",
-  });
+const initialFormState = {
+  year: "",
+  province: "",
+  vegetable: "",
+  production: "",
+  planted_area: "",
+  harvested_area: "",
+  fertilizer_type: "",
+  fertilizer_amount: "",
+};
 
+const CropsAddPage = () => {
+  const [form, setForm] = useState(initialFormState);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -29,34 +34,16 @@ const CropsAddPage = () => {
     setMessage("");
 
     try {
-      // const token = Cookies.get("token");
-
-      // const res = await fetch("http://127.0.0.1:8000/crops", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify(form),
-      // });
-
-      const res = await api.post("/crops", JSON.stringify(form));
-
-      const data = res.data;
-
-      if (!res.status) throw new Error(data.message || "Something went wrong");
+      const res = await api.post("/crops", form);
 
       setMessage("Data berhasil ditambahkan.");
-      setForm({ year: "", province: "", vegetable: "", production: "" });
+      setForm(initialFormState);
+
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setMessage(err.message);
-      } else {
-        setMessage("Terjadi kesalahan.");
-      }
+    } catch (err: any) {
+      setMessage(err.response?.data?.message || "Terjadi kesalahan.");
     } finally {
       setLoading(false);
     }
@@ -78,16 +65,11 @@ const CropsAddPage = () => {
     formData.append("file", file);
 
     try {
-      const res = await api.post("/crops/import", formData, {
+      await api.post("/crops/import", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      const result = res.data;
-
-      if (res.status < 200 || res.status >= 300)
-        throw new Error(result.message || "Import failed");
 
       setMessage("Import berhasil.");
       setFile(null);
@@ -95,12 +77,10 @@ const CropsAddPage = () => {
       setTimeout(() => {
         router.push("/dashboard/list/crops");
       }, 1500);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setMessage(err.message);
-      } else {
-        setMessage("Terjadi kesalahan.");
-      }
+    } catch (err: any) {
+      setMessage(
+        err.response?.data?.message || "Terjadi kesalahan saat import."
+      );
     } finally {
       setLoading(false);
     }
@@ -142,6 +122,42 @@ const CropsAddPage = () => {
           value={form.vegetable}
           onChange={handleChange}
           placeholder="Jenis Sayur"
+          className="border px-3 py-2 rounded w-full"
+          required
+        />
+        <input
+          type="number"
+          name="planted_area"
+          value={form.planted_area}
+          onChange={handleChange}
+          placeholder="Luas Tanam (contoh: 1000)"
+          className="border px-3 py-2 rounded w-full"
+          required
+        />
+        <input
+          type="number"
+          name="harvested_area"
+          value={form.harvested_area}
+          onChange={handleChange}
+          placeholder="Luas Panen (contoh: 800)"
+          className="border px-3 py-2 rounded w-full"
+          required
+        />
+        <input
+          type="text"
+          name="fertilizer_type"
+          value={form.fertilizer_type}
+          onChange={handleChange}
+          placeholder="Jenis Pupuk (contoh: Urea)"
+          className="border px-3 py-2 rounded w-full"
+          required
+        />
+        <input
+          type="number"
+          name="fertilizer_amount"
+          value={form.fertilizer_amount}
+          onChange={handleChange}
+          placeholder="Jumlah Pupuk (contoh: 1200)"
           className="border px-3 py-2 rounded w-full"
           required
         />
