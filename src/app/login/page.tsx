@@ -26,10 +26,7 @@ function Page() {
     toast.loading("Loging in...");
 
     try {
-      const response = await api.post(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/auth/login`,
-        { email, password }
-      );
+      const response = await api.post(`auth/login`,{ email, password });
       Cookies.set("token", response.data.token);
       router.push("/dashboard/admin");
       toast.dismiss();
