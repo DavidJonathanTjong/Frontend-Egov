@@ -45,7 +45,11 @@ const CropsAddPage = () => {
     formData.append("fertilizer_amount", form.fertilizer_amount);
 
     try {
-      await api.post("/crops", formData);
+      await api.post("/crops", formData, {
+        headers: {
+          "Content-Type": undefined,
+        },
+      });
       setMessage("Data berhasil ditambahkan.");
       setForm(initialFormState);
 
@@ -75,12 +79,7 @@ const CropsAddPage = () => {
     formData.append("file", file);
 
     try {
-      await api.post("/crops/import", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
+      await api.post("/crops/import", formData);
       setMessage("Import berhasil.");
       setFile(null);
 
