@@ -33,7 +33,7 @@ const SingleTeacherPage = () => {
 
   const [, setImageFileName] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState("/images/avatar.png");
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const token = Cookies.get("token");
   const [kodePegawai, setKodePegawai] = useState<string | null>(null);
@@ -76,40 +76,40 @@ const SingleTeacherPage = () => {
     fetchProfileData();
   }, [token, kodePegawai]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setSelectedImage(file);
-      setProfileImage(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const file = event.target.files[0];
+  //     setSelectedImage(file);
+  //     setProfileImage(URL.createObjectURL(file));
+  //   }
+  // };
 
-  const handleUpload = async () => {
-    if (!selectedImage) {
-      alert("Please select an image first.");
-      return;
-    }
+  // const handleUpload = async () => {
+  //   if (!selectedImage) {
+  //     alert("Please select an image first.");
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append("img_profile", selectedImage);
+  //   const formData = new FormData();
+  //   formData.append("img_profile", selectedImage);
 
-    try {
-      const response = await api.post(
-        `/profile/edit-image/${kodePegawai}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      alert("Image uploaded successfully!");
-      setProfileImage(response.data.profile_image);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Failed to upload image.");
-    }
-  };
+  //   try {
+  //     const response = await api.post(
+  //       `/profile/edit-image/${kodePegawai}`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //     alert("Image uploaded successfully!");
+  //     setProfileImage(response.data.profile_image);
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     alert("Failed to upload image.");
+  //   }
+  // };
 
   useEffect(() => {
     if (!token || !kodePegawai) return;
@@ -152,7 +152,7 @@ const SingleTeacherPage = () => {
               height={150}
               className="rounded-md object-cover"
             />
-            <div className="flex flex-col items-center md:items-start gap-2 mt-2 w-full">
+            {/* <div className="flex flex-col items-center md:items-start gap-2 mt-2 w-full">
               <input
                 type="file"
                 accept="image/*"
@@ -175,7 +175,7 @@ const SingleTeacherPage = () => {
               <p className="text-sm text-gray-500 text-center md:text-left">
                 Allowed JPG, GIF or PNG. Max size of 800Kb
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
 

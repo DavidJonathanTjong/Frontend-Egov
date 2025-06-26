@@ -30,13 +30,13 @@ const UserListPage = () => {
   const [data, setData] = useState<DataPegawaiKedinasan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [, setImagePreview] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
+    // setValue,
     formState: { errors },
   } = useForm<RegisterFormInput>();
 
@@ -76,17 +76,17 @@ const UserListPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setValue("img_profile", file);
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImagePreview(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setValue("img_profile", file);
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       setImagePreview(event.target?.result as string);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const onSubmit = async (formData: RegisterFormInput) => {
     try {
@@ -231,7 +231,7 @@ const UserListPage = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center">
+                {/* <div className="flex flex-col items-center">
                   <label className="block text-sm font-medium">
                     Gambar Profil
                   </label>
@@ -250,7 +250,7 @@ const UserListPage = () => {
                       className="mt-3 rounded-md border"
                     />
                   )}
-                </div>
+                </div> */}
               </div>
               <div className="flex justify-end gap-2 mt-4">
                 <button
