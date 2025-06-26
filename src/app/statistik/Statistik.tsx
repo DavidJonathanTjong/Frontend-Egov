@@ -51,8 +51,9 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
   const pieData = () => {
     const grouped: { [key: string]: number } = {};
     filteredData.forEach((item) => {
+      const prod = parseFloat(item.production);
       grouped[item.vegetable] =
-        (grouped[item.vegetable] || 0) + item.production;
+        (grouped[item.vegetable] || 0) + (isNaN(prod) ? 0 : prod);
     });
     return {
       labels: Object.keys(grouped),
@@ -75,7 +76,8 @@ const Dashboard: React.FC<DashboardProps> = ({ apiData }) => {
   const barData = () => {
     const grouped: { [key: string]: number } = {};
     filteredData.forEach((item) => {
-      grouped[item.year] = (grouped[item.year] || 0) + item.production;
+      const prod = parseFloat(item.production);
+      grouped[item.year] = (grouped[item.year] || 0) + (isNaN(prod) ? 0 : prod);
     });
     return {
       labels: Object.keys(grouped),

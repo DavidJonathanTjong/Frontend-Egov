@@ -1,7 +1,7 @@
 export interface ApiData {
   id: string;
-  year: string;
+  year: number;
   province: string;
   vegetable: string;
-  production: number;
+  production: string;
 }
