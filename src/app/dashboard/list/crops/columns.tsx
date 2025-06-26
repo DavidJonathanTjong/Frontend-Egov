@@ -38,7 +38,7 @@ function ActionsCell({ row }: { row: Row<DataPopulasiBanjarbaru> }) {
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (confirm("Apakah Anda yakin ingin menghapus pegawai ini?")) {
+    if (confirm("Apakah Anda yakin ingin menghapus data crops ini?")) {
       try {
         const token = Cookies.get("token");
         const response = await api.delete(`/crops/${crops.id}`, {

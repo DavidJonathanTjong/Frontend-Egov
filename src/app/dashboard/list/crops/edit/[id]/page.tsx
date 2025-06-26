@@ -29,6 +29,8 @@ interface CropResponse {
   };
 }
 
+const fertilizerOptions = ["Urea", "Organik", "NPK", "ZA"];
+
 const CropsUpdatePage = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -71,7 +73,9 @@ const CropsUpdatePage = () => {
     fetchCrop();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -118,7 +122,6 @@ const CropsUpdatePage = () => {
             { label: "Produksi (ton)", name: "production", type: "number" },
             { label: "Luas Tanam", name: "planted_area", type: "number" },
             { label: "Luas Panen", name: "harvested_area", type: "number" },
-            { label: "Jenis Pupuk", name: "fertilizer_type", type: "text" },
             {
               label: "Jumlah Pupuk",
               name: "fertilizer_amount",
@@ -138,6 +141,25 @@ const CropsUpdatePage = () => {
             />
           </div>
         ))}
+
+        {/* Select khusus untuk fertilizer_type */}
+        <div>
+          <label className="block font-medium">Jenis Pupuk</label>
+          <select
+            name="fertilizer_type"
+            value={form.fertilizer_type}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          >
+            <option value="">Pilih Jenis Pupuk</option>
+            {fertilizerOptions.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <button
           type="submit"
