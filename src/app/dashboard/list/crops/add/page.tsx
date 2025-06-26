@@ -34,20 +34,10 @@ const CropsAddPage = () => {
     setLoading(true);
     setMessage("");
 
-    const formData = new FormData();
-    formData.append("year", form.year);
-    formData.append("province", form.province);
-    formData.append("vegetable", form.vegetable);
-    formData.append("production", form.production);
-    formData.append("planted_area", form.planted_area);
-    formData.append("harvested_area", form.harvested_area);
-    formData.append("fertilizer_type", form.fertilizer_type);
-    formData.append("fertilizer_amount", form.fertilizer_amount);
-
     try {
-      await api.post("/crops", formData, {
+      await api.post("/crops", form, {
         headers: {
-          "Content-Type": undefined,
+          "Content-Type": "application/json",
         },
       });
       setMessage("Data berhasil ditambahkan.");
@@ -63,6 +53,7 @@ const CropsAddPage = () => {
       setLoading(false);
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
