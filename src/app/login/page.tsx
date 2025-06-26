@@ -26,8 +26,11 @@ function Page() {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-        { email, password }
+        "https://agri-stat-api.vercel.app/api/auth/login",
+        {
+          email,
+          password,
+        }
       );
       Cookies.set("token", response.data.token);
       router.push("/dashboard/admin");
