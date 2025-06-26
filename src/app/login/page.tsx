@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import api from "@/hooks/apiService";
 
 function Page() {
   const router = useRouter();
@@ -25,13 +26,10 @@ function Page() {
     toast.loading("Loging in...");
 
     try {
-      const response = await axios.post(
-        "https://agri-stat-api.vercel.app/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
       Cookies.set("token", response.data.token);
       router.push("/dashboard/admin");
       toast.dismiss();

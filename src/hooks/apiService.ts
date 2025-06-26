@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BACKEND,
   headers: {
     "Content-Type": "application/json",
-    "Accept": "application/json",
+    Accept: "application/json",
   },
 });
 
@@ -24,9 +24,8 @@ const onRefreshed = (newToken: string) => {
 // Request interceptor
 api.interceptors.request.use(async (config) => {
   const token = Cookies.get("token");
-  if (token) {
+  if (token && config.url !== "/auth/login" && config.url !== "/auth/refresh") {
     config.headers["Authorization"] = `Bearer ${token}`;
-    // await fetchUserData(token);
   }
   return config;
 });
