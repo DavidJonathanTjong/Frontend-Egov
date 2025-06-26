@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/apiService";
 import { AxiosError } from "axios";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const initialFormState = {
   year: "",
@@ -44,7 +46,16 @@ const CropsAddPage = () => {
         production: parseFloat(form.production),
       };
 
-      await api.post("/crops", preparedData);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/crops`,
+        preparedData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setMessage("Data berhasil ditambahkan.");
       setForm(initialFormState);
 
