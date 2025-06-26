@@ -100,6 +100,12 @@ const CropsUpdatePage = () => {
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+      <button
+        onClick={() => router.push("/dashboard/list/crops")}
+        className="mb-4 text-blue-600 hover:underline"
+      >
+        ← Kembali ke Halaman Crops
+      </button>
       <h2 className="text-xl font-semibold mb-4">Form Update untuk ID: {id}</h2>
       {message && <p className="mb-2 text-red-500">{message}</p>}
 

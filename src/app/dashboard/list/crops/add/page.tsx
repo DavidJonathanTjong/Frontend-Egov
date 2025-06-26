@@ -160,15 +160,19 @@ const CropsAddPage = () => {
           className="border px-3 py-2 rounded w-full"
           required
         />
-        <input
-          type="text"
+        <select
           name="fertilizer_type"
           value={form.fertilizer_type}
           onChange={handleChange}
-          placeholder="Jenis Pupuk (contoh: Urea)"
           className="border px-3 py-2 rounded w-full"
           required
-        />
+        >
+          <option value="">Pilih Jenis Pupuk</option>
+          <option value="Urea">Urea</option>
+          <option value="Organik">Organik</option>
+          <option value="NPK">NPK</option>
+          <option value="ZA">ZA</option>
+        </select>
         <input
           type="number"
           name="fertilizer_amount"
