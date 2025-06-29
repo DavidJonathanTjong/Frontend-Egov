@@ -182,7 +182,11 @@ const ProductionChart = () => {
             className="w-full p-2 border rounded"
             disabled={isLoading.provinces}
           >
-            <option value="">Pilih Provinsi</option>
+            <option value="">
+              {isLoading.provinces
+                ? "Memuat daftar provinsi..."
+                : "Pilih Provinsi"}
+            </option>
             {provinces.map((province) => (
               <option key={province.value} value={province.value}>
                 {province.label}
@@ -202,7 +206,11 @@ const ProductionChart = () => {
             className="w-full p-2 border rounded"
             disabled={isLoading.vegetables}
           >
-            <option value="">Pilih Sayuran</option>
+            <option value="">
+              {isLoading.vegetables
+                ? "Memuat daftar sayuran..."
+                : "Pilih Sayuran"}
+            </option>
             {vegetables.map((vegetable) => (
               <option key={vegetable.value} value={vegetable.value}>
                 {vegetable.label}

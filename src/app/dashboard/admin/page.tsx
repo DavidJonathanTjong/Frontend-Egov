@@ -1,6 +1,6 @@
 "use client";
 
-import EventCalendar from "@/components/tampilan_adm/EventCalendar";
+// import EventCalendar from "@/components/tampilan_adm/EventCalendar";
 import FinanceChart from "@/components/tampilan_adm/FinanceChart";
 import UserCard from "@/components/tampilan_adm/UserCard";
 import useAuth from "@/hooks/useAuth";
@@ -71,7 +71,7 @@ const AdminPage = () => {
             <UserCard type="Total User" count={totalUsers} />
             <UserCard type="Total Crops" count={totalCrops} />
           </div>
-          <EventCalendar />
+          {/* <EventCalendar /> */}
         </div>
       </div>
     </div>
